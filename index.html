@@ -1,0 +1,242 @@
+<html style="margin:0; padding:0;">
+
+	<body style="margin: 0; padding: 0;">
+		<img id="img-ship" src="ship-med.png" style="display:none;">
+		<img id="img-goal" src="gem-med.png" style="display:none;">
+		<img id="img-planet" src="planet-med.png" style="display:none;">
+		<img id="img-you-died" src="you-died-med.png" style="display:none;">
+		<img id="img-you-win" src="you-win-med.png" style="display:none;">
+
+		<canvas id="canvas" style="margin:0; padding:0;"/>
+	</body>
+
+<script type="text/javascript">
+
+	const PROJECTILE_VELOCITY = 1;
+	const ROT_SPEED = 0.005;
+	var G = 0.05;
+
+	var canvas = document.getElementById("canvas");
+	var ctx = canvas.getContext("2d");
+	var img_ship = document.getElementById('img-ship');
+	var img_goal = document.getElementById('img-goal');
+	var img_planet = document.getElementById('img-planet');
+	var img_you_died = document.getElementById('img-you-died');
+	var img_you_win = document.getElementById('img-you-win');
+
+	var model = {
+		ship : {
+			x : window.innerWidth/10.0,
+			y : window.innerHeight/2.0,
+			v : [0.1,0.0],
+			mass : 1,
+			theta : 0,
+			phi : 0,
+			rotate : 0,
+			},
+		planets : [ 
+			{
+				x : window.innerWidth/2.0,
+				y : window.innerHeight/4,
+				mass : 150
+			},
+			{
+				x : 3*window.innerWidth/4.0,
+				y : 3*window.innerHeight/4,
+				mass : 100
+			}
+			
+		],
+
+		goal : {
+			x : 9.0*window.innerWidth/10.0,
+			y : window.innerHeight/2.0
+		},
+
+		projectiles : [],
+
+		ts : null
+	};
+
+	function dist(a,b) {
+		return Math.sqrt((b.y-a.y)**2 + (b.x - a.x)**2)
+	}
+
+	model.update = function(ts) {
+		if(this.ts === null) {
+			this.ts = ts;
+			return;
+		}
+
+		if(this.state == 'dead' || this.state == 'win') { return; }
+		var ship = this.ship;
+
+		// Update time
+		dt = ts - this.ts;
+		this.ts = ts;
+
+		// Projectile-planet collision
+		this.projectiles.forEach(projectile => {
+			this.planets.forEach((planet, idx) =>  {
+				if(dist(projectile, planet) < 32) {
+					this.planets.splice(idx, 1);
+				}
+			});
+		});
+
+		// Planet-ship collision
+		this.planets.forEach(planet => {
+			if(dist(ship, planet) < 32) {
+				this.die();
+			}
+		});
+
+			if(dist(ship, this.goal) < 20) {
+				this.win();
+			}
+
+		// Ship movement
+		this.planets.forEach(function(planet) {
+			var r = dist(planet, ship);
+			var ru = [(planet.x - ship.x) / r, (planet.y - ship.y) / r] 
+			var f = G*ship.mass*planet.mass/(r*r);
+			var a = f*ship.mass;
+			var dv = [ru[0]*a*dt, ru[1]*a*dt]
+			ship.v[0] += dv[0]
+			ship.v[1] += dv[1]
+		});
+		ship.x += ship.v[0]*dt;
+		ship.y += ship.v[1]*dt;
+
+		// Projectile motion
+		this.projectiles.forEach(function(projectile) {
+			projectile.x += projectile.v[0]*dt;
+			projectile.y += projectile.v[1]*dt;			
+		});
+
+		// Ship rotation
+		this.ship.phi += this.ship.rotate*dt;
+
+
+	}
+
+	model.rotateShipLeft = function() {
+		this.ship.rotate = -ROT_SPEED;
+	}
+
+	model.rotateShipRight = function() {
+		this.ship.rotate = ROT_SPEED;
+	}
+
+	model.stopShipRotate = function() {
+		this.ship.rotate = 0;
+	}
+
+	model.fireGun = function() {
+		this.projectiles.push({
+			x : this.ship.x,
+			y : this.ship.y,
+			v : [PROJECTILE_VELOCITY*Math.cos(this.ship.phi),PROJECTILE_VELOCITY*Math.sin(this.ship.phi)],
+			size : 6
+		});
+	}
+
+	model.die = function() {
+		this.state = 'dead';
+	}
+
+	model.win = function() {
+		this.state = 'win';
+	}
+
+	model.start = function() {
+		this.state = 'playing';
+	}
+
+	function drawShip(ship) {
+		ctx.save();
+		ctx.translate(ship.x, ship.y);
+		ctx.rotate(ship.phi);
+		ctx.drawImage(img_ship, -(img_ship.width/2),-(img_ship.height/2));
+		ctx.restore();
+	}
+
+	function drawGoal(goal) {
+		ctx.drawImage(img_goal, goal.x-(img_goal.width/2),goal.y-(img_goal.height/2));
+	}
+
+	function drawPlanet(planet) {
+		ctx.drawImage(img_planet, planet.x-(img_planet.width/2),planet.y-(img_planet.height/2));
+	}
+
+	function drawProjectile(projectile) {
+		ctx.fillStyle = "white";
+		ctx.fillRect(projectile.x - projectile.size/2, projectile.y-projectile.size/2, projectile.size, projectile.size);
+	}
+
+	function draw() {
+  		ctx.canvas.width  = window.innerWidth;
+  		ctx.canvas.height = window.innerHeight;
+  		ctx.fillStyle = "black";
+		ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
+
+		drawShip(model.ship);
+		drawGoal(model.goal);
+
+		model.planets.forEach(function(planet) {
+			drawPlanet(planet);
+		})
+
+		if(model.state == 'dead') {
+			ctx.drawImage(img_you_died, window.innerWidth/2-img_you_died.width/2, window.innerHeight/2-img_you_died.height/2)
+			return;
+		}
+
+		if(model.state == 'win') {
+			ctx.drawImage(img_you_win, window.innerWidth/2-img_you_win.width/2, window.innerHeight/2-img_you_win.height/2)
+			return;
+		}
+
+		model.projectiles.forEach(function(projectile) {
+			drawProjectile(projectile);
+		})
+
+	}
+
+	window.addEventListener('resize', function() {
+		ctx.canvas.width  = window.innerWidth;
+  		ctx.canvas.height = window.innerHeight;
+
+	});
+
+	document.addEventListener('keydown', (event) => {
+		switch(event.key) {
+			case "ArrowRight":
+			case "ArrowUp":
+				model.rotateShipRight();
+				break;
+
+			case "ArrowLeft":
+			case "ArrowDown":
+				model.rotateShipLeft();
+				break;
+
+			case " ":
+				model.fireGun();
+				break;
+		} 
+	});
+
+	document.addEventListener('keyup', (event) => {
+		model.stopShipRotate();
+	});
+
+	function step(ts) {
+		model.update(ts);
+		draw();
+		window.requestAnimationFrame(step);
+	}
+
+	window.requestAnimationFrame(step);
+</script>
+</html>
