@@ -26,10 +26,11 @@ model.update = function(ts) {
 		this.ts = ts;
 
 		// Projectile-planet collision
-		this.projectiles.forEach(projectile => {
-			this.planets.forEach((planet, idx) =>  {
+		this.projectiles.forEach((projectile, projectile_idx) => {
+			this.planets.forEach((planet, planet_idx) =>  {
 				if(dist(projectile, planet) < 32) {
-					this.planets.splice(idx, 1);
+					this.planets.splice(planet_idx, 1);
+					this.projectiles.splice(projectile_idx, 1);
 				}
 			});
 		});
