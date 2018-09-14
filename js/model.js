@@ -129,8 +129,8 @@ model.start = function() {
 
 model.loadLevels = function(levels, startLevel) {
 	this.levels = levels;
-	this.loadLevel(this.levels[0]);
 	this.level = startLevel || 0;
+	this.loadLevel(this.levels[this.level]);
 }
 
 model.loadLevel = function(level) {
