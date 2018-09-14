@@ -1,5 +1,24 @@
 var levels = [
-{
+	{
+		name : "Intro",
+		planets : [ 
+			{
+				x : 700,
+				y : 200,
+				mass : 250
+			},
+		],
+		goal : {
+			x : 1100,
+			y : 350
+		},
+		ship : {
+			x : 150,
+			y : 550,
+			v : [0.05,0.01],
+		}
+	},
+	{
 		name : "Three",
 		planets : [ 
 			{

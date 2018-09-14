@@ -92,6 +92,10 @@
 	}
 
 	document.addEventListener('keydown', (event) => {
+		if(model.state == 'win') {
+			model.nextLevel();
+		}
+
 		switch(event.key) {
 			case "ArrowRight":
 			case "ArrowUp":
@@ -120,7 +124,7 @@
 	}
 
 	window.onload = function() {
-		model.loadLevel(levels[0]);
+		model.loadLevels(levels);
 		window.requestAnimationFrame(step);		
 	}
 </script>

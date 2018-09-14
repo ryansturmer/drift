@@ -10,7 +10,9 @@ var model = {
 	goal : {},
 	projectiles : [],
 	particles : [],
-	ts : null
+	ts : null,
+	levels : [],
+	level : 0
 };
 
 model.update = function(ts) {
@@ -125,6 +127,12 @@ model.start = function() {
 	this.state = 'playing';
 }
 
+model.loadLevels = function(levels, startLevel) {
+	this.levels = levels;
+	this.loadLevel(this.levels[0]);
+	this.level = startLevel || 0;
+}
+
 model.loadLevel = function(level) {
 	this.planets = level.planets;
 	this.goal = level.goal;
@@ -134,5 +142,10 @@ model.loadLevel = function(level) {
 	this.ship.theta = level.ship.theta || 0;
 	this.ship.phi = level.ship.phi || 0;
 	this.ship.mass = level.ship.mass || 1.0;
+}
 
+model.nextLevel = function() {
+	this.level = (this.level + 1) % this.levels.length;
+	this.loadLevel(this.levels[this.level]);
+	this.start();
 }
