@@ -9,6 +9,7 @@ var model = {
 	planets : [],
 	goal : {},
 	projectiles : [],
+	particles : [],
 	ts : null
 };
 
@@ -31,6 +32,16 @@ model.update = function(ts) {
 				if(dist(projectile, planet) < 32) {
 					this.planets.splice(planet_idx, 1);
 					this.projectiles.splice(projectile_idx, 1);
+					for(var i=0; i<20; i++) {
+						var angle = Math.random()*6.28;
+						var v = (1+Math.random())/2.0;
+						this.particles.push({
+							x : (planet.x + 32*Math.cos(angle)),
+							y : (planet.y + 32*Math.sin(angle)),
+							lifespan : Math.random()*800,
+							v : [v*Math.cos(angle), v*Math.sin(angle)]
+						})
+					}
 				}
 			});
 		});
@@ -42,9 +53,10 @@ model.update = function(ts) {
 			}
 		});
 
-			if(dist(ship, this.goal) < 40) {
-				this.win();
-			}
+		// Ship-goal collision
+		if(dist(ship, this.goal) < 40) {
+			this.win();
+		}
 
 		// Ship movement
 		this.planets.forEach(function(planet) {
@@ -63,6 +75,15 @@ model.update = function(ts) {
 		this.projectiles.forEach(function(projectile) {
 			projectile.x += projectile.v[0]*dt;
 			projectile.y += projectile.v[1]*dt;			
+		});
+
+		this.particles.forEach((particle, idx) => {
+			particle.x += particle.v[0]*dt;
+			particle.y += particle.v[1]*dt;
+			particle.lifespan -= dt;
+			if(particle.lifespan <= 0) {
+				this.particles.splice(idx, 1);
+			}
 		});
 
 		// Ship rotation

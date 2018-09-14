@@ -53,8 +53,8 @@
 	}
 
 	function draw() {
-  		//ctx.canvas.width  = window.innerWidth;
-  		//ctx.canvas.height = window.innerHeight;
+
+  		// Blank the screen
   		ctx.fillStyle = "black";
 		ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
 
@@ -65,19 +65,29 @@
 			drawPlanet(planet);
 		})
 
+		model.projectiles.forEach(function(projectile) {
+			drawProjectile(projectile);
+		})
+
+		ctx.fillStyle ='white';
+		model.particles.forEach(particle => {
+			ctx.fillRect(particle.x - 3, particle.y-3, 6, 6);
+
+		});
+
+		// Draw "YOU DIED" if player dies.
 		if(model.state == 'dead') {
 			ctx.drawImage(img_you_died, canvas.width/2-img_you_died.width/2, canvas.height/2-img_you_died.height/2)
 			return;
 		}
 
+		// Draw the checkmark if player wins
 		if(model.state == 'win') {
 			ctx.drawImage(img_you_win, canvas.width/2-img_you_win.width/2, canvas.height/2-img_you_win.height/2)
 			return;
 		}
 
-		model.projectiles.forEach(function(projectile) {
-			drawProjectile(projectile);
-		})
+
 
 	}
 
