@@ -109,5 +109,9 @@ model.loadLevel = function(level) {
 	this.goal = level.goal;
 	this.ship.x = level.ship.x;
 	this.ship.y = level.ship.y;
+	this.ship.v = level.ship.v || [0,0];
+	this.ship.theta = level.ship.theta || 0;
+	this.ship.phi = level.ship.phi || 0;
+	this.ship.mass = level.ship.mass || 1.0;
 
 }

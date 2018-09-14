@@ -1,4 +1,37 @@
 var levels = [
+{
+		name : "Three",
+		planets : [ 
+			{
+				x : 600,
+				y : 300,
+				mass : 100
+			},
+			{
+				x : 100,
+				y : 300,
+				mass : 60
+			},		
+					{
+				x : 1100,
+				y : 500,
+				mass : 35
+			},		
+		],
+		goal : {
+			x : 1100,
+			y : 300
+		},
+		ship : {
+			x : 50,
+			y : 50,
+			v : [0.06,-0.005],
+			mass : 1,
+			theta : 0.3,
+			phi : -0.4,
+			rotate : 0,
+		},
+	},
 	{
 		name : "Bereft",
 		planets : [ 
@@ -22,7 +55,7 @@ var levels = [
 		ship : {
 			x : 50,
 			y : 300,
-			v : [0.05,0.0],
+			v : [0.03,0.0],
 			mass : 1,
 			theta : 0,
 			phi : 0,
