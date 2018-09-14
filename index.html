@@ -1,15 +1,18 @@
 <html style="margin:0; padding:0;">
 	
-	<body style="margin: 0; padding: 0;">
+	<body style="margin: 0; padding: 0; background: black;">
 		<img id="img-ship" src="images/ship-med.png" style="display:none;">
 		<img id="img-goal" src="images/gem-med.png" style="display:none;">
 		<img id="img-planet" src="images/planet-med.png" style="display:none;">
 		<img id="img-you-died" src="images/you-died-med.png" style="display:none;">
 		<img id="img-you-win" src="images/you-win-med.png" style="display:none;">
-		<canvas id="canvas" style="margin:0; padding:0;"/>
+		<div style="text-align: center; margin-top: 10px;">
+		<canvas id="canvas" width="1200" height="600" style="margin:0; padding:0; border: 1px solid #222222;"/>
+		</div>
 	</body>
 
 <script type="text/javascript" src="js/model.js"></script>
+<script type="text/javascript" src="js/levels.js"></script>
 <script type="text/javascript">
 
 	const PROJECTILE_VELOCITY = 1;
@@ -50,8 +53,8 @@
 	}
 
 	function draw() {
-  		ctx.canvas.width  = window.innerWidth;
-  		ctx.canvas.height = window.innerHeight;
+  		//ctx.canvas.width  = window.innerWidth;
+  		//ctx.canvas.height = window.innerHeight;
   		ctx.fillStyle = "black";
 		ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
 
@@ -63,12 +66,12 @@
 		})
 
 		if(model.state == 'dead') {
-			ctx.drawImage(img_you_died, window.innerWidth/2-img_you_died.width/2, window.innerHeight/2-img_you_died.height/2)
+			ctx.drawImage(img_you_died, canvas.width/2-img_you_died.width/2, canvas.height/2-img_you_died.height/2)
 			return;
 		}
 
 		if(model.state == 'win') {
-			ctx.drawImage(img_you_win, window.innerWidth/2-img_you_win.width/2, window.innerHeight/2-img_you_win.height/2)
+			ctx.drawImage(img_you_win, canvas.width/2-img_you_win.width/2, canvas.height/2-img_you_win.height/2)
 			return;
 		}
 
@@ -78,10 +81,10 @@
 
 	}
 
-	window.addEventListener('resize', function() {
+/*	window.addEventListener('resize', function() {
 		ctx.canvas.width  = window.innerWidth;
   		ctx.canvas.height = window.innerHeight;
-	});
+	});*/
 
 	document.addEventListener('keydown', (event) => {
 		switch(event.key) {
@@ -112,7 +115,7 @@
 	}
 	console.log("ready")
 	window.onload = function() {
-		console.log("get lit")
+		model.loadLevel(levels[0]);
 		window.requestAnimationFrame(step);		
 	}
 </script>

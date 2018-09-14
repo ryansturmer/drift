@@ -1,34 +1,14 @@
 var model = {
 	ship : {
-		x : window.innerWidth/10.0,
-		y : window.innerHeight/2.0,
-		v : [0.05,0.0],
 		mass : 1,
 		theta : 0,
 		phi : 0,
 		rotate : 0,
-		},
-	planets : [ 
-		{
-			x : window.innerWidth/2.0,
-			y : window.innerHeight/4,
-			mass : 150
-		},
-		{
-			x : 3*window.innerWidth/4.0,
-			y : 3*window.innerHeight/4,
-			mass : 100
-		}
-		
-	],
-
-	goal : {
-		x : 9.0*window.innerWidth/10.0,
-		y : window.innerHeight/2.0
+		v : [0,0]
 	},
-
+	planets : [],
+	goal : {},
 	projectiles : [],
-
 	ts : null
 };
 
@@ -121,4 +101,12 @@ model.win = function() {
 
 model.start = function() {
 	this.state = 'playing';
+}
+
+model.loadLevel = function(level) {
+	this.planets = level.planets;
+	this.goal = level.goal;
+	this.ship.x = level.ship.x;
+	this.ship.y = level.ship.y;
+
 }
