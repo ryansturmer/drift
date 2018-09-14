@@ -1,11 +1,11 @@
 <html style="margin:0; padding:0;">
 
 	<body style="margin: 0; padding: 0;">
-		<img id="img-ship" src="ship-med.png" style="display:none;">
-		<img id="img-goal" src="gem-med.png" style="display:none;">
-		<img id="img-planet" src="planet-med.png" style="display:none;">
-		<img id="img-you-died" src="you-died-med.png" style="display:none;">
-		<img id="img-you-win" src="you-win-med.png" style="display:none;">
+		<img id="img-ship" src="images/ship-med.png" style="display:none;">
+		<img id="img-goal" src="images/gem-med.png" style="display:none;">
+		<img id="img-planet" src="images/planet-med.png" style="display:none;">
+		<img id="img-you-died" src="images/you-died-med.png" style="display:none;">
+		<img id="img-you-win" src="images/you-win-med.png" style="display:none;">
 
 		<canvas id="canvas" style="margin:0; padding:0;"/>
 	</body>
@@ -14,7 +14,7 @@
 
 	const PROJECTILE_VELOCITY = 1;
 	const ROT_SPEED = 0.005;
-	var G = 0.05;
+	var G = 0.02;
 
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
@@ -28,7 +28,7 @@
 		ship : {
 			x : window.innerWidth/10.0,
 			y : window.innerHeight/2.0,
-			v : [0.1,0.0],
+			v : [0.05,0.0],
 			mass : 1,
 			theta : 0,
 			phi : 0,
