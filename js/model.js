@@ -42,7 +42,7 @@ model.update = function(ts) {
 			}
 		});
 
-			if(dist(ship, this.goal) < 20) {
+			if(dist(ship, this.goal) < 40) {
 				this.win();
 			}
 
