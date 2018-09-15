@@ -12,6 +12,10 @@ var model = {
 	particles : [],
 	ts : null,
 	levels : [],
+	title : {
+		text : '',
+		lifespan : 0
+	},
 	level : 0
 };
 
@@ -21,7 +25,7 @@ model.update = function(ts) {
 			return;
 		}
 
-		if(this.state == 'dead' || this.state == 'win') { return; }
+		if(this.state != 'playing') { this.ts = null; return; }
 		var ship = this.ship;
 
 		// Update time
@@ -91,7 +95,9 @@ model.update = function(ts) {
 		// Ship rotation
 		this.ship.phi += this.ship.rotate*dt;
 
-
+		if(this.title.lifespan > 0) {
+			this.title.lifespan -= dt;
+		}
 	}
 
 model.rotateShipLeft = function() {
@@ -126,6 +132,11 @@ model.win = function() {
 model.start = function() {
 	this.state = 'playing';
 }
+model.restart = function() {
+	this.state = "stopped";
+	this.loadLevel(this.levels[this.level]);
+	this.start();
+}
 
 model.loadLevels = function(levels, startLevel) {
 	this.levels = levels;
@@ -138,14 +149,23 @@ model.loadLevel = function(level) {
 	this.goal = level.goal;
 	this.ship.x = level.ship.x;
 	this.ship.y = level.ship.y;
-	this.ship.v = level.ship.v || [0,0];
+	if(level.ship.v) {
+		this.ship.v = [level.ship.v[0], level.ship.v[1]];
+	}
 	this.ship.theta = level.ship.theta || 0;
 	this.ship.phi = level.ship.phi || 0;
 	this.ship.mass = level.ship.mass || 1.0;
+	this.title.text = level.name;
+	this.title.lifespan = 3000;
 }
 
 model.nextLevel = function() {
 	this.level = (this.level + 1) % this.levels.length;
 	this.loadLevel(this.levels[this.level]);
 	this.start();
+}
+
+model.showTitle = function(text, lifespan) {
+	this.title.text = text;
+	this.title.lifespan = lifespan;
 }

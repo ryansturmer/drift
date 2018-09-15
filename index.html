@@ -1,13 +1,15 @@
 <html style="margin:0; padding:0;">
-	
-	<body style="margin: 0; padding: 0; background: #111111;">
-		<img id="img-ship" src="images/ship-med.png" style="display:none;">
-		<img id="img-goal" src="images/gem-med.png" style="display:none;">
-		<img id="img-planet" src="images/planet-med.png" style="display:none;">
-		<img id="img-you-died" src="images/you-died-med.png" style="display:none;">
-		<img id="img-you-win" src="images/you-win-med.png" style="display:none;">
+	<head>
+		<link rel="stylesheet" href="style.css" />
+	</head>	
+	<body>
+		<img id="img-ship" src="images/ship-med.png">
+		<img id="img-goal" src="images/gem-med.png">
+		<img id="img-planet" src="images/planet-med.png">
+		<img id="img-you-died" src="images/you-died-med.png">
+		<img id="img-you-win" src="images/you-win-med.png">
 		<div style="text-align: center; margin-top: 10px;">
-		<canvas id="canvas" width="1200" height="600" style="margin:0; padding:0; border: 1px solid #222222;"/>
+		<canvas id="canvas" width="1200" height="600"/>
 		</div>
 	</body>
 
@@ -52,8 +54,14 @@
 		ctx.fillRect(projectile.x - projectile.size/2, projectile.y-projectile.size/2, projectile.size, projectile.size);
 	}
 
-	function draw() {
+	function drawText(text, style) {		
+  		ctx.font = "48px MrPixel"
+		var metrics = ctx.measureText(text);
+		console.log(metrics)
+		ctx.fillText(text, (canvas.width/2)-(metrics.width/2), 300);
+	}
 
+	function draw() {
   		// Blank the screen
   		ctx.fillStyle = "black";
 		ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
@@ -70,11 +78,12 @@
 		})
 
 		ctx.fillStyle ='white';
+
 		model.particles.forEach(particle => {
 			ctx.fillRect(particle.x - 3, particle.y-3, 6, 6);
 
 		});
-
+		
 		// Draw "YOU DIED" if player dies.
 		if(model.state == 'dead') {
 			ctx.drawImage(img_you_died, canvas.width/2-img_you_died.width/2, canvas.height/2-img_you_died.height/2)
@@ -87,13 +96,22 @@
 			return;
 		}
 
-
+		if(model.title.lifespan > 0) {
+			if(model.title.lifespan > 1000) {
+				drawText(model.title.text, 'white');
+			} else {
+				ctx.globalAlpha = model.title.lifespan/1000;
+				drawText(model.title.text, 'white');
+				ctx.globalAlpha = 1;
+			}
+		}
 
 	}
 
 	document.addEventListener('keydown', (event) => {
 		if(model.state == 'win') {
 			model.nextLevel();
+			return;
 		}
 
 		switch(event.key) {
@@ -105,6 +123,10 @@
 			case "ArrowLeft":
 			case "ArrowDown":
 				model.rotateShipLeft();
+				break;
+
+			case "Enter":
+				model.restart();
 				break;
 
 			case " ":
@@ -125,6 +147,7 @@
 
 	window.onload = function() {
 		model.loadLevels(levels, 0);
+		model.start();
 		window.requestAnimationFrame(step);		
 	}
 </script>

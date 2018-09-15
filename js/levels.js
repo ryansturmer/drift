@@ -1,6 +1,6 @@
 var levels = [
 	{
-		name : "Intro",
+		name : "Bereft",
 		planets : [ 
 			{
 				x : 700,
@@ -52,7 +52,7 @@ var levels = [
 		},
 	},
 	{
-		name : "Bereft",
+		name : "One Left",
 		planets : [ 
 		{
 			x : 600,

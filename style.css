@@ -1,0 +1,29 @@
+@font-face {
+	font-family: MrPixel;
+	src: url(fonts/mrpixel.otf);
+}
+
+canvas {
+	image-rendering: optimizeSpeed;
+	image-rendering: -moz-crisp-edges;
+	image-rendering: -webkit-optimize-contrast;
+	image-rendering: optimize-contrast;
+	image-rendering: pixelated;
+	-ms-interpolation-mode: nearest-neighbor;
+	font-smooth: never;
+	-webkit-font-smoothing : none;
+	margin:0; 
+	padding:0; 
+	border: 1px 
+	solid #222222;
+}
+
+img {
+	display:none ;
+}
+
+body {
+	margin: 0; 
+	padding: 0; 
+	background: #111111;
+}
