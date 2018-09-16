@@ -149,5 +149,51 @@ var levels = [
 			phi : 2.5,
 			rotate : 0,
 		},
+	},
+
+	{
+		name : "Purple Haze",
+		planets : [
+			{
+				x : 300,
+				y : 300,
+				mass : 100
+			},
+			{
+				x : 800,
+				y : 400,
+				mass : 200,
+				type : 'rock'
+			},
+
+
+			{
+				x : 800,
+				y : 200,
+				mass : 150
+
+			}
+
+		],
+		clouds : [
+			{
+				x : 600,
+				y : 440,
+				drag : 0.04
+			}
+		],
+		goal : {
+			x : 1000,
+			y : 450
+		},
+		ship : {
+			x : 100,
+			y : 150,
+			v : [0.1,0.0],
+			mass : 1,
+			theta : 0,
+			phi : 0,
+			rotate : 0,
+		},
 	}
 ]

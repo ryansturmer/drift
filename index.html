@@ -9,6 +9,7 @@
 		<img id="img-rock" src="images/rock-med.png">
 		<img id="img-you-died" src="images/you-died-med.png">
 		<img id="img-you-win" src="images/you-win-med.png">
+		<img id="img-cloud" src="images/cloud.png">
 		<div style="text-align: center; margin-top: 10px;">
 		<canvas id="canvas" width="1200" height="600"/>
 		</div>
@@ -24,10 +25,12 @@
 
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
+
 	var img_ship = document.getElementById('img-ship');
 	var img_goal = document.getElementById('img-goal');
 	var img_planet = document.getElementById('img-planet');
 	var img_rock = document.getElementById('img-rock');
+	var img_cloud = document.getElementById('img-cloud');
 	var img_you_died = document.getElementById('img-you-died');
 	var img_you_win = document.getElementById('img-you-win');
 
@@ -58,6 +61,10 @@
 		}
 	}
 
+	function drawCloud(cloud) {
+		ctx.drawImage(img_cloud, cloud.x-(img_cloud.width/2),cloud.y-(img_cloud.height/2));
+	}
+
 	function drawProjectile(projectile) {
 		ctx.fillStyle = "white";
 		ctx.fillRect(projectile.x - projectile.size/2, projectile.y-projectile.size/2, projectile.size, projectile.size);
@@ -75,7 +82,6 @@
   		ctx.fillStyle = "black";
 		ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
 
-		drawShip(model.ship);
 		drawGoal(model.goal);
 
 		model.planets.forEach(function(planet) {
@@ -86,7 +92,13 @@
 			drawProjectile(projectile);
 		})
 
+		drawShip(model.ship);
+
 		ctx.fillStyle ='white';
+
+		model.clouds.forEach(function(cloud) {
+			drawCloud(cloud);
+		})
 
 		model.particles.forEach(particle => {
 			ctx.fillRect(particle.x - 3, particle.y-3, 6, 6);
@@ -143,6 +155,19 @@
 			case " ":
 				model.fireGun();
 				break;
+
+			case "1":
+			case "2":
+			case "3":
+			case "4":
+			case "5":
+			case "6":
+			case "7":
+			case "8":
+			case "9":
+				model.jumpToLevel(parseInt(event.key)-1);
+				break;
+
 		} 
 	});
 

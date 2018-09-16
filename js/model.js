@@ -7,6 +7,7 @@ var model = {
 		v : [0,0]
 	},
 	planets : [],
+	clouds : [],
 	goal : {},
 	projectiles : [],
 	particles : [],
@@ -76,13 +77,35 @@ model.update = function(ts) {
 			ship.v[0] += dv[0]
 			ship.v[1] += dv[1]
 		});
+
+		this.clouds.forEach(cloud => {
+			if(dist(ship, cloud) < 32) {
+				/*var f = cloud.drag;
+				var a = f*ship.mass;
+				var sv = Math.sqrt(ship.v[0]**2 + ship.v[1]**2)
+				var su = [ship.v[0]/sv, ship.v[1]/sv]
+				var dv = [su[0]*a*dt, su[1]*a*dt]
+				ship.v[0] -= dv[0];
+				ship.v[1] -= dv[1];
+				*/
+				ship.v[0] = ship.v[0] * (1-cloud.drag)
+				ship.v[1] = ship.v[1] * (1-cloud.drag)
+			}
+		});
+
 		ship.x += ship.v[0]*dt;
 		ship.y += ship.v[1]*dt;
 
 		// Projectile motion
-		this.projectiles.forEach(function(projectile) {
+		this.projectiles.forEach(projectile => {
+			/*this.clouds.forEach(cloud => {
+				if(dist(projectile, cloud) < 32) {
+					projectile.v[0] = projectile.v[0] * (1-cloud.drag)
+					projectile.v[1] = projectile.v[1] * (1-cloud.drag)
+				}
+			});*/
 			projectile.x += projectile.v[0]*dt;
-			projectile.y += projectile.v[1]*dt;			
+			projectile.y += projectile.v[1]*dt;	
 		});
 
 		this.particles.forEach((particle, idx) => {
@@ -151,6 +174,12 @@ model.loadLevel = function(level) {
 	level.planets.forEach(planet => {
 		this.planets.push(planet);
 	})
+
+	this.clouds = [];
+	(level.clouds || []).forEach(cloud => {
+		this.clouds.push(cloud);
+	});
+
 	//this.planets = level.planets;
 	this.goal = level.goal;
 	this.ship.x = level.ship.x;
@@ -169,6 +198,14 @@ model.nextLevel = function() {
 	this.level = (this.level + 1) % this.levels.length;
 	this.loadLevel(this.levels[this.level]);
 	this.start();
+}
+
+model.jumpToLevel = function(i) {
+	this.level = i;
+	if(i < this.levels.length) {
+		this.loadLevel(this.levels[this.level]);
+		this.start();
+	}
 }
 
 model.showTitle = function(text, lifespan) {
