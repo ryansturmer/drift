@@ -119,7 +119,9 @@
 
 	document.addEventListener('keydown', (event) => {
 		if(model.state == 'win') {
-			model.nextLevel();
+			if(event.key == 'Enter') {
+				model.nextLevel();				
+			}
 			return;
 		}
 
