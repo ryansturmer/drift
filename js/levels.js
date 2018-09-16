@@ -19,17 +19,17 @@ var levels = [
 		}
 	},
 	{
-		name : "Othello",
+		name : "Balance",
 		planets : [ 
 		{
-			x : 600,
+			x : 550,
 			y : 100,
-			mass : 100
+			mass : 150
 		},
 		{
-			x : 800,
+			x : 850,
 			y : 500,
-			mass : 100
+			mass : 150
 		}
 		
 		],
