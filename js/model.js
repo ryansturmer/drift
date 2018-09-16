@@ -36,17 +36,19 @@ model.update = function(ts) {
 		this.projectiles.forEach((projectile, projectile_idx) => {
 			this.planets.forEach((planet, planet_idx) =>  {
 				if(dist(projectile, planet) < 32) {
-					this.planets.splice(planet_idx, 1);
 					this.projectiles.splice(projectile_idx, 1);
-					for(var i=0; i<20; i++) {
-						var angle = Math.random()*6.28;
-						var v = (1+Math.random())/2.0;
-						this.particles.push({
-							x : (planet.x + 32*Math.cos(angle)),
-							y : (planet.y + 32*Math.sin(angle)),
-							lifespan : Math.random()*800,
-							v : [v*Math.cos(angle), v*Math.sin(angle)]
-						})
+					if((planet.type || 'planet') != 'rock') {
+						this.planets.splice(planet_idx, 1);
+						for(var i=0; i<20; i++) {
+							var angle = Math.random()*6.28;
+							var v = (1+Math.random())/2.0;
+							this.particles.push({
+								x : (planet.x + 32*Math.cos(angle)),
+								y : (planet.y + 32*Math.sin(angle)),
+								lifespan : Math.random()*800,
+								v : [v*Math.cos(angle), v*Math.sin(angle)]
+							})
+						}
 					}
 				}
 			});
@@ -145,7 +147,11 @@ model.loadLevels = function(levels, startLevel) {
 }
 
 model.loadLevel = function(level) {
-	this.planets = level.planets;
+	this.planets = [];
+	level.planets.forEach(planet => {
+		this.planets.push(planet);
+	})
+	//this.planets = level.planets;
 	this.goal = level.goal;
 	this.ship.x = level.ship.x;
 	this.ship.y = level.ship.y;

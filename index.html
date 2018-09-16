@@ -6,6 +6,7 @@
 		<img id="img-ship" src="images/ship-med.png">
 		<img id="img-goal" src="images/gem-med.png">
 		<img id="img-planet" src="images/planet-med.png">
+		<img id="img-rock" src="images/rock-med.png">
 		<img id="img-you-died" src="images/you-died-med.png">
 		<img id="img-you-win" src="images/you-win-med.png">
 		<div style="text-align: center; margin-top: 10px;">
@@ -26,6 +27,7 @@
 	var img_ship = document.getElementById('img-ship');
 	var img_goal = document.getElementById('img-goal');
 	var img_planet = document.getElementById('img-planet');
+	var img_rock = document.getElementById('img-rock');
 	var img_you_died = document.getElementById('img-you-died');
 	var img_you_win = document.getElementById('img-you-win');
 
@@ -46,7 +48,14 @@
 	}
 
 	function drawPlanet(planet) {
-		ctx.drawImage(img_planet, planet.x-(img_planet.width/2),planet.y-(img_planet.height/2));
+		switch(planet.type) {
+			case 'rock':
+				ctx.drawImage(img_rock, planet.x-(img_planet.width/2),planet.y-(img_planet.height/2));
+				break;			
+			default:
+				ctx.drawImage(img_planet, planet.x-(img_planet.width/2),planet.y-(img_planet.height/2));
+				break;
+		}
 	}
 
 	function drawProjectile(projectile) {
@@ -146,7 +155,7 @@
 	}
 
 	window.onload = function() {
-		model.loadLevels(levels, 0);
+		model.loadLevels(levels, 4);
 		model.start();
 		window.requestAnimationFrame(step);		
 	}
