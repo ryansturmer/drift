@@ -73,7 +73,6 @@
 	function drawText(text, style) {		
   		ctx.font = "48px MrPixel"
 		var metrics = ctx.measureText(text);
-		console.log(metrics)
 		ctx.fillText(text, (canvas.width/2)-(metrics.width/2), 300);
 	}
 
