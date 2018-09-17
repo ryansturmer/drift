@@ -230,7 +230,8 @@ model.loadLevels = function(levels, startLevel) {
 model.loadLevel = function(level) {
 	this.planets = [];
 	this.fragments = [];
-	
+	this.projectiles = [];
+	this.particles = [];
 	level.planets.forEach(planet => {
 		this.planets.push(planet);
 	})
