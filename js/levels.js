@@ -211,15 +211,15 @@ var levels = [
 		clouds : [],
 		goal : {
 			x : 1000,
-			y : 475
+			y : 300
 		},
 		ship : {
 			x : 100,
-			y : 150,
-			v : [0.1,0.0],
+			y : 75,
+			v : [0.05,0.0],
 			mass : 1,
 			theta : 0,
-			phi : 0,
+			phi : -0.5,
 			rotate : 0,
 		},
 	}
