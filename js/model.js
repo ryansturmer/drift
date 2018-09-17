@@ -1,4 +1,5 @@
 var model = {
+	uid : 0,
 	ship : {
 		mass : 1,
 		theta : 0,
@@ -34,8 +35,24 @@ model.update = function(ts) {
 		dt = ts - this.ts;
 		this.ts = ts;
 
-		// Projectile-planet collision
+		// Projectile-planet and Projectile-fragment collision
 		this.projectiles.forEach((projectile, projectile_idx) => {
+			this.fragments.forEach((fragment, fragment_idx) => {
+				if(dist(projectile, fragment) < 16) {
+					this.fragments.splice(fragment_idx, 1);
+							for(var i=0; i<10; i++) {
+								var angle = Math.random()*6.28;
+								var v = (1+Math.random())/2.0;
+								this.particles.push({
+									x : (fragment.x + 32*Math.cos(angle)),
+									y : (fragment.y + 32*Math.sin(angle)),
+									lifespan : Math.random()*800,
+									v : [v*Math.cos(angle), v*Math.sin(angle)]
+								})
+							}
+				}
+			});
+
 			this.planets.forEach((planet, planet_idx) =>  {
 				if(dist(projectile, planet) < 32) {
 					this.projectiles.splice(projectile_idx, 1);
@@ -70,17 +87,20 @@ model.update = function(ts) {
 								})
 							}
 								angle = planet.angle || 0;
+								uid = this.getUID();
 								this.fragments.push({
 									x : planet.x  + 16*Math.cos(angle),
 									y : planet.y + 16*Math.sin(angle),
 									v : [Math.cos(angle)*planet.v, Math.sin(angle)*planet.v],
-									mass : planet.mass/2.0
+									mass : planet.mass/2.0,
+									uid : uid
 								});
 								this.fragments.push({
 									x : planet.x  + -16*Math.cos(angle),
 									y : planet.y + -16*Math.sin(angle),
 									v : [-Math.cos(angle)*planet.v, -Math.sin(angle)*planet.v],
-									mass : planet.mass/2.0
+									mass : planet.mass/2.0,
+									uid : uid
 								});
 
 						break;
@@ -97,11 +117,38 @@ model.update = function(ts) {
 			}
 		});
 
-		// Fragment-ship collision
-		this.fragments.forEach(fragment => {
+		// Fragment collision
+		this.fragments.forEach((fragment,i) => {
+
+			// Ship
 			if(dist(ship, fragment) < 16) {
 				this.die();
 			}
+			
+			// Other fragments
+			this.fragments.forEach((fragment2, j) => {
+				if(i!=j && fragment.uid != fragment2.uid) {
+					if(dist(fragment, fragment2) < 32) {
+							for(var a=0; a<30; a++) {
+								var angle = Math.random()*6.28;
+								var v = (1+Math.random())/2.0;
+								this.particles.push({
+									x : (fragment.x + fragment2.x)/2,
+									y :  (fragment.y + fragment2.y)/2,
+									lifespan : Math.random()*800,
+									v : [v*Math.cos(angle), v*Math.sin(angle)]
+								})
+							}
+						if(i < j) {
+							this.fragments.splice(i, 1);							
+							this.fragments.splice(j-1, 1);							
+						} else {
+							this.fragments.splice(j, 1);							
+							this.fragments.splice(i-1, 1);							
+						}
+					}
+				}
+			});
 		});
 
 		// Ship-goal collision
@@ -137,14 +184,6 @@ model.update = function(ts) {
 
 		this.clouds.forEach(cloud => {
 			if(dist(ship, cloud) < 32) {
-				/*var f = cloud.drag;
-				var a = f*ship.mass;
-				var sv = Math.sqrt(ship.v[0]**2 + ship.v[1]**2)
-				var su = [ship.v[0]/sv, ship.v[1]/sv]
-				var dv = [su[0]*a*dt, su[1]*a*dt]
-				ship.v[0] -= dv[0];
-				ship.v[1] -= dv[1];
-				*/
 				ship.v[0] = ship.v[0] * (1-cloud.drag)
 				ship.v[1] = ship.v[1] * (1-cloud.drag)
 			}
@@ -155,12 +194,6 @@ model.update = function(ts) {
 
 		// Projectile motion
 		this.projectiles.forEach(projectile => {
-			/*this.clouds.forEach(cloud => {
-				if(dist(projectile, cloud) < 32) {
-					projectile.v[0] = projectile.v[0] * (1-cloud.drag)
-					projectile.v[1] = projectile.v[1] * (1-cloud.drag)
-				}
-			});*/
 			projectile.x += projectile.v[0]*dt;
 			projectile.y += projectile.v[1]*dt;	
 		});
@@ -272,4 +305,9 @@ model.jumpToLevel = function(i) {
 model.showTitle = function(text, lifespan) {
 	this.title.text = text;
 	this.title.lifespan = lifespan;
+}
+
+model.getUID = function() {
+	this.uid += 1;
+	return this.uid;
 }

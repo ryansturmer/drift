@@ -222,5 +222,42 @@ var levels = [
 			phi : -0.5,
 			rotate : 0,
 		},
+	},
+
+	{
+		name : "Untitled",
+		planets : [
+			{
+				x : 400,
+				y : 292,
+				mass : 200,
+				type : 'cracked',
+				angle : 0,
+				v : 0.04
+			},
+
+			{
+				x : 800,
+				y : 308,
+				mass : 150,
+				type : 'cracked',
+				angle : 0,
+				v : 0.04
+			}
+		],
+		clouds : [],
+		goal : {
+			x : 400,
+			y : 500
+		},
+		ship : {
+			x : 1000,
+			y : 75,
+			v : [-0.05,0.0],
+			mass : 1,
+			theta : 0,
+			phi : -2,
+			rotate : 0,
+		},
 	}
 ]
