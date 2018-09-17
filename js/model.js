@@ -120,7 +120,6 @@ model.update = function(ts) {
 			ship.v[1] += dv[1]
 		});
 
-		console.log(this.fragments)
 		this.fragments.forEach(fragment => {
 			var r = dist(fragment, ship);
 			var ru = [(fragment.x - ship.x) / r, (fragment.y - ship.y) / r] 
