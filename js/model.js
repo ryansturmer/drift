@@ -11,7 +11,8 @@ var model = {
 	goal : {},
 	projectiles : [],
 	particles : [],
-	ts : null,
+	fragments : [],
+ 	ts : null,
 	levels : [],
 	title : {
 		text : '',
@@ -38,18 +39,52 @@ model.update = function(ts) {
 			this.planets.forEach((planet, planet_idx) =>  {
 				if(dist(projectile, planet) < 32) {
 					this.projectiles.splice(projectile_idx, 1);
-					if((planet.type || 'planet') != 'rock') {
-						this.planets.splice(planet_idx, 1);
-						for(var i=0; i<20; i++) {
-							var angle = Math.random()*6.28;
-							var v = (1+Math.random())/2.0;
-							this.particles.push({
-								x : (planet.x + 32*Math.cos(angle)),
-								y : (planet.y + 32*Math.sin(angle)),
-								lifespan : Math.random()*800,
-								v : [v*Math.cos(angle), v*Math.sin(angle)]
-							})
-						}
+					switch(planet.type || 'planet') {
+						case 'planet':
+							this.planets.splice(planet_idx, 1);
+							for(var i=0; i<20; i++) {
+								var angle = Math.random()*6.28;
+								var v = (1+Math.random())/2.0;
+								this.particles.push({
+									x : (planet.x + 32*Math.cos(angle)),
+									y : (planet.y + 32*Math.sin(angle)),
+									lifespan : Math.random()*800,
+									v : [v*Math.cos(angle), v*Math.sin(angle)]
+								})
+							}
+							break;
+
+						case 'rock':
+						break;
+
+						case 'cracked':
+							this.planets.splice(planet_idx, 1);
+							for(var i=0; i<50; i++) {
+								var angle = Math.random()*6.28;
+								var v = 2*(1+Math.random())/2.0;
+								this.particles.push({
+									x : (planet.x + 32*Math.cos(angle)),
+									y : (planet.y + 32*Math.sin(angle)),
+									lifespan : Math.random()*50,
+									v : [v*Math.cos(angle), v*Math.sin(angle)]
+								})
+							}
+								angle = planet.angle || 0;
+								this.fragments.push({
+									x : planet.x  + 16*Math.cos(angle),
+									y : planet.y + 16*Math.sin(angle),
+									v : [Math.cos(angle)*planet.v, Math.sin(angle)*planet.v],
+									mass : planet.mass/2.0
+								});
+								this.fragments.push({
+									x : planet.x  + -16*Math.cos(angle),
+									y : planet.y + -16*Math.sin(angle),
+									v : [-Math.cos(angle)*planet.v, -Math.sin(angle)*planet.v],
+									mass : planet.mass/2.0
+								});
+
+						break;
+
 					}
 				}
 			});
@@ -62,13 +97,20 @@ model.update = function(ts) {
 			}
 		});
 
+		// Fragment-ship collision
+		this.fragments.forEach(fragment => {
+			if(dist(ship, fragment) < 16) {
+				this.die();
+			}
+		});
+
 		// Ship-goal collision
 		if(dist(ship, this.goal) < 40) {
 			this.win();
 		}
 
 		// Ship movement
-		this.planets.forEach(function(planet) {
+		this.planets.forEach(planet => {
 			var r = dist(planet, ship);
 			var ru = [(planet.x - ship.x) / r, (planet.y - ship.y) / r] 
 			var f = G*ship.mass*planet.mass/(r*r);
@@ -76,6 +118,22 @@ model.update = function(ts) {
 			var dv = [ru[0]*a*dt, ru[1]*a*dt]
 			ship.v[0] += dv[0]
 			ship.v[1] += dv[1]
+		});
+
+		console.log(this.fragments)
+		this.fragments.forEach(fragment => {
+			var r = dist(fragment, ship);
+			var ru = [(fragment.x - ship.x) / r, (fragment.y - ship.y) / r] 
+			var f = G*ship.mass*fragment.mass/(r*r);
+			var a = f*ship.mass;
+			var dv = [ru[0]*a*dt, ru[1]*a*dt]
+			ship.v[0] += dv[0]
+			ship.v[1] += dv[1]
+		});
+
+		this.fragments.forEach(fragment => {
+			fragment.x += fragment.v[0]*dt;
+			fragment.y += fragment.v[1]*dt;
 		});
 
 		this.clouds.forEach(cloud => {
@@ -171,6 +229,7 @@ model.loadLevels = function(levels, startLevel) {
 
 model.loadLevel = function(level) {
 	this.planets = [];
+
 	level.planets.forEach(planet => {
 		this.planets.push(planet);
 	})
@@ -187,6 +246,7 @@ model.loadLevel = function(level) {
 	if(level.ship.v) {
 		this.ship.v = [level.ship.v[0], level.ship.v[1]];
 	}
+
 	this.ship.theta = level.ship.theta || 0;
 	this.ship.phi = level.ship.phi || 0;
 	this.ship.mass = level.ship.mass || 1.0;

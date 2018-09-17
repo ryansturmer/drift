@@ -195,5 +195,32 @@ var levels = [
 			phi : 0,
 			rotate : 0,
 		},
+	},
+{
+		name : "Broken",
+		planets : [
+			{
+				x : 600,
+				y : 300,
+				mass : 150,
+				type : 'cracked',
+				angle : 0.5,
+				v : 0.08
+			}
+		],
+		clouds : [],
+		goal : {
+			x : 1000,
+			y : 475
+		},
+		ship : {
+			x : 100,
+			y : 150,
+			v : [0.1,0.0],
+			mass : 1,
+			theta : 0,
+			phi : 0,
+			rotate : 0,
+		},
 	}
 ]

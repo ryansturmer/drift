@@ -7,6 +7,8 @@
 		<img id="img-goal" src="images/gem-med.png">
 		<img id="img-planet" src="images/planet-med.png">
 		<img id="img-rock" src="images/rock-med.png">
+		<img id="img-cracked" src="images/planet-cracked-med.png">
+		<img id="img-fragment" src="images/fragment-med.png">
 		<img id="img-you-died" src="images/you-died-med.png">
 		<img id="img-you-win" src="images/you-win-med.png">
 		<img id="img-cloud" src="images/cloud.png">
@@ -29,6 +31,8 @@
 	var img_ship = document.getElementById('img-ship');
 	var img_goal = document.getElementById('img-goal');
 	var img_planet = document.getElementById('img-planet');
+	var img_cracked = document.getElementById('img-cracked');
+	var img_fragment = document.getElementById('img-fragment');
 	var img_rock = document.getElementById('img-rock');
 	var img_cloud = document.getElementById('img-cloud');
 	var img_you_died = document.getElementById('img-you-died');
@@ -53,12 +57,19 @@
 	function drawPlanet(planet) {
 		switch(planet.type) {
 			case 'rock':
-				ctx.drawImage(img_rock, planet.x-(img_planet.width/2),planet.y-(img_planet.height/2));
+				ctx.drawImage(img_rock, planet.x-(img_rock.width/2),planet.y-(img_rock.height/2));
+				break;			
+			case 'cracked':
+				ctx.drawImage(img_cracked, planet.x-(img_cracked.width/2),planet.y-(img_cracked.height/2));
 				break;			
 			default:
 				ctx.drawImage(img_planet, planet.x-(img_planet.width/2),planet.y-(img_planet.height/2));
 				break;
 		}
+	}
+
+	function drawFragment(fragment) {
+		ctx.drawImage(img_fragment, fragment.x-(img_fragment.width/2),fragment.y-(img_fragment.height/2));		
 	}
 
 	function drawCloud(cloud) {
@@ -85,6 +96,10 @@
 
 		model.planets.forEach(function(planet) {
 			drawPlanet(planet);
+		})
+
+		model.fragments.forEach(fragment => {
+			drawFragment(fragment);
 		})
 
 		model.projectiles.forEach(function(projectile) {
@@ -181,7 +196,7 @@
 	}
 
 	window.onload = function() {
-		model.loadLevels(levels, 0);
+		model.loadLevels(levels, 6);
 		model.start();
 		window.requestAnimationFrame(step);		
 	}
