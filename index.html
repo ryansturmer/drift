@@ -110,7 +110,9 @@
 			drawProjectile(projectile);
 		})
 
-		drawShip(model.ship);
+		if(model.state != 'dead' && model.state != 'dying') {
+			drawShip(model.ship);
+		}
 
 		ctx.fillStyle ='white';
 
