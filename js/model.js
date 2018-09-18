@@ -28,7 +28,31 @@ model.update = function(ts) {
 			return;
 		}
 
-		if(this.state != 'playing') { this.ts = null; return; }
+		switch(this.state) {
+			case 'dying':
+				if(this.particles.length == 0) {
+					this.state = 'dead';
+					return;
+				}
+			case 'playing':
+			break;
+			default:
+				this.ts = null; return;
+			break;
+		}
+
+		this.particles.forEach((particle, idx) => {
+			particle.x += particle.v[0]*dt;
+			particle.y += particle.v[1]*dt;
+			particle.lifespan -= dt;
+			if(particle.lifespan <= 0) {
+				this.particles.splice(idx, 1);
+			}
+		});
+
+		// If dying, only process particles
+		if(this.state === 'dying') { return; }
+
 		var ship = this.ship;
 
 		// Update time
@@ -199,15 +223,6 @@ model.update = function(ts) {
 			projectile.y += projectile.v[1]*dt;	
 		});
 
-		this.particles.forEach((particle, idx) => {
-			particle.x += particle.v[0]*dt;
-			particle.y += particle.v[1]*dt;
-			particle.lifespan -= dt;
-			if(particle.lifespan <= 0) {
-				this.particles.splice(idx, 1);
-			}
-		});
-
 		// Ship rotation
 		this.ship.phi += this.ship.rotate*dt;
 
@@ -238,7 +253,18 @@ model.fireGun = function() {
 }
 
 model.die = function() {
-	this.state = 'dead';
+	console.log('dying')
+	this.state = 'dying';
+	for(var i=0; i<20; i++) {
+		var v = 3*(1+Math.random())/2.0;
+		var angle = Math.random()*6.28;
+		this.particles.push({
+			x : this.ship.x,
+			y :  this.ship.y,
+			lifespan : Math.random()*200,
+			v : [v*Math.cos(angle), v*Math.sin(angle)]
+		})
+	}
 }
 
 model.win = function() {

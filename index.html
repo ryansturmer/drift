@@ -124,7 +124,7 @@
 		});
 		
 		// Draw "YOU DIED" if player dies.
-		if(model.state == 'dead') {
+		if(model.state === 'dead' || model.state === 'dying') {
 			ctx.drawImage(img_you_died, canvas.width/2-img_you_died.width/2, canvas.height/2-img_you_died.height/2)
 			return;
 		}
