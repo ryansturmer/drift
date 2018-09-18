@@ -83,7 +83,7 @@ var levels = [
 		},
 	},
 	{
-		name : "Untitled",
+		name : "The Eight Escape",
 		planets : [ 
 			{
 				x : 400,
@@ -225,7 +225,7 @@ var levels = [
 	},
 
 	{
-		name : "Untitled",
+		name : "Finesse",
 		planets : [
 			{
 				x : 400,

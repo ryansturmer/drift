@@ -256,12 +256,12 @@ model.die = function() {
 	console.log('dying')
 	this.state = 'dying';
 	for(var i=0; i<20; i++) {
-		var v = 3*(1+Math.random())/2.0;
+		var v = 2.5*(1+Math.random())/2.0;
 		var angle = Math.random()*6.28;
 		this.particles.push({
 			x : this.ship.x,
 			y :  this.ship.y,
-			lifespan : Math.random()*200,
+			lifespan : Math.random()*50,
 			v : [v*Math.cos(angle), v*Math.sin(angle)]
 		})
 	}
