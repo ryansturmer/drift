@@ -133,7 +133,7 @@ var levels = [
 				x : 900,
 				y : 450,
 				type : 'rock',
-				mass : 100
+				mass : 200
 			}
 		],
 		goal : {
@@ -231,7 +231,7 @@ var levels = [
 				x : 400,
 				y : 292,
 				mass : 200,
-				type : 'cracked',
+				type : 'planet',
 				angle : 0,
 				v : 0.04
 			},
@@ -243,7 +243,17 @@ var levels = [
 				type : 'cracked',
 				angle : 0,
 				v : 0.04
+			},
+
+			{
+				x : 550,
+				y : 480,
+				mass : 10,
+				type : 'rock',
+				angle : 0,
+				v : 0.04
 			}
+
 		],
 		clouds : [],
 		goal : {
@@ -254,6 +264,34 @@ var levels = [
 			x : 1000,
 			y : 75,
 			v : [-0.05,0.0],
+			mass : 1,
+			theta : 0,
+			phi : -2,
+			rotate : 0,
+		},
+	},
+
+	{
+		name : "Untitled",
+		planets : [
+			{
+				x : 400,
+				y : 292,
+				mass : 100,
+				type : 'planet',
+				angle : 0,
+				v : 0.04
+			},
+		],
+		clouds : [],
+		goal : {
+			x : 1100,
+			y : 500
+		},
+		ship : {
+			x : 50,
+			y : 50,
+			v : [0.001,0.0],
 			mass : 1,
 			theta : 0,
 			phi : -2,
