@@ -272,26 +272,61 @@ var levels = [
 	},
 
 	{
-		name : "Untitled",
+		name : "The Iron Curtain",
 		planets : [
 			{
-				x : 400,
-				y : 292,
-				mass : 100,
+				x : 300,
+				y : 200,
+				mass : 150,
 				type : 'planet',
-				angle : 0,
+				angle : 3.14/2.0,
 				v : 0.04
 			},
+			{
+				x : 500,
+				y : 450,
+				mass : 150,
+				type : 'planet',
+			},
+			{
+				x : 1015,
+				y : 530,
+				mass : 20,
+				type : 'rock',
+			},
+			{
+				x : 870,
+				y : 325,
+				mass : 150,
+				type : 'cracked',
+				angle : 90*180/Math.PI,
+				v : 0.08
+			},
+
 		],
-		clouds : [],
+
+		clouds : [
+			{ x : 650, y : -28, drag : 0.08 },		
+			{ x : 650, y : 36, drag : 0.08 },		
+			{ x : 650, y : 100, drag : 0.08 },
+			{ x : 650, y : 164, drag : 0.08 },
+			{ x : 650, y : 228, drag : 0.08 },
+			{ x : 650, y : 292, drag : 0.08 },
+			{ x : 650, y : 356, drag : 0.08 },
+			{ x : 650, y : 420, drag : 0.08 },
+			{ x : 650, y : 484, drag : 0.08 },
+			{ x : 650, y : 548, drag : 0.08 },
+			{ x : 650, y : 612, drag : 0.08 },
+
+		],
 		goal : {
 			x : 1100,
 			y : 500
 		},
 		ship : {
 			x : 50,
-			y : 50,
-			v : [0.001,0.0],
+			y : 350,
+			v : [0.01,0.01],
 			mass : 1,
 			theta : 0,
 			phi : -2,
