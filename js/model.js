@@ -39,6 +39,7 @@ model.update = function(ts) {
 		this.projectiles.forEach((projectile, projectile_idx) => {
 			this.fragments.forEach((fragment, fragment_idx) => {
 				if(dist(projectile, fragment) < 16) {
+					this.projectiles.splice(projectile_idx, 1);
 					this.fragments.splice(fragment_idx, 1);
 							for(var i=0; i<10; i++) {
 								var angle = Math.random()*6.28;
