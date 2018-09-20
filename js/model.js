@@ -345,6 +345,12 @@ model.nextLevel = function() {
 	this.loadLevel(this.levels[this.level]);
 	this.start();
 }
+model.prevLevel = function() {
+	this.level = (this.level - 1);
+	if(this.level < 0) { this.level = this.levels.length-1; }
+	this.loadLevel(this.levels[this.level]);
+	this.start();
+}
 
 model.jumpToLevel = function(i) {
 	this.level = i;
