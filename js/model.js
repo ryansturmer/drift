@@ -15,6 +15,7 @@ var model = {
 	fragments : [],
  	ts : null,
 	levels : [],
+	portals : [],
 	title : {
 		text : '',
 		lifespan : 0
@@ -214,6 +215,7 @@ model.update = function(ts) {
 			}
 		});
 
+		// Move the ship 
 		ship.x += ship.v[0]*dt;
 		ship.y += ship.v[1]*dt;
 
@@ -226,9 +228,30 @@ model.update = function(ts) {
 		// Ship rotation
 		this.ship.phi += this.ship.rotate*dt;
 
+		// Fade out the title
 		if(this.title.lifespan > 0) {
 			this.title.lifespan -= dt;
 		}
+
+		this.portals.forEach(portal => {
+			if(portal.disable) {
+				if((dist(portal.a, ship) > 32) && (dist(portal.b, ship) > 32)) {
+					portal.disable = false;
+				}
+			} else {
+				if(dist(portal.a, ship) < 32) {
+					portal.disable = true;
+					ship.x = portal.b.x;
+					ship.y = portal.b.y;
+				}
+				else if(dist(portal.b, ship) < 32) {
+					portal.disable = true;
+					ship.x = portal.a.x;
+					ship.y = portal.a.y;
+				} 				
+			}
+
+		});
 	}
 
 model.rotateShipLeft = function() {
@@ -291,6 +314,8 @@ model.loadLevel = function(level) {
 	this.fragments = [];
 	this.projectiles = [];
 	this.particles = [];
+	this.portals = level.portals || [];
+
 	level.planets.forEach(planet => {
 		this.planets.push(planet);
 	})

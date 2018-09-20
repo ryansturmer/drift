@@ -332,5 +332,47 @@ var levels = [
 			phi : -2,
 			rotate : 0,
 		},
-	}
+	},
+
+	{
+		name : "Still Alive",
+		planets : [
+			{
+				x : 600,
+				y : 292,
+				mass : 200,
+				type : 'planet',
+				angle : 0,
+				v : 0.04
+			},
+			{
+				x : 150,
+				y : 450,
+				mass : 75,
+				type : 'rock',
+				angle : 0,
+				v : 0.04
+			},
+		],
+		portals : [
+			{
+				a : {x : 100, y : 100},
+				b : {x :535, y:550}
+			}
+		],
+		clouds : [],
+		goal : {
+			x : 100,
+			y : 500
+		},
+		ship : {
+			x : 1000,
+			y : 75,
+			v : [-0.1,0.0],
+			mass : 1,
+			theta : 0,
+			phi : -2,
+			rotate : 0,
+		},
+	},
 ]

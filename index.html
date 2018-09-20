@@ -16,6 +16,7 @@
 		<img id="img-you-died" src="images/you-died-med.png">
 		<img id="img-you-win" src="images/you-win-med.png">
 		<img id="img-cloud" src="images/cloud.png">
+		<img id="img-portal" src="images/portal-med.png">
 		<div style="text-align: center; margin-top: 10px;">
 		<canvas id="canvas" width="1200" height="600"/>
 		</div>
@@ -39,6 +40,7 @@
 	var img_fragment = document.getElementById('img-fragment');
 	var img_rock = document.getElementById('img-rock');
 	var img_cloud = document.getElementById('img-cloud');
+	var img_portal = document.getElementById('img-portal');
 	var img_you_died = document.getElementById('img-you-died');
 	var img_you_win = document.getElementById('img-you-win');
 
@@ -58,6 +60,10 @@
 		ctx.drawImage(img_goal, goal.x-(img_goal.width/2),goal.y-(img_goal.height/2));
 	}
 
+	function drawPortal(portal) {
+		ctx.drawImage(img_portal, portal.a.x-(img_portal.width/2), portal.a.y-(img_portal.height/2));
+		ctx.drawImage(img_portal, portal.b.x-(img_portal.width/2), portal.b.y-(img_portal.height/2));
+	}
 	function drawPlanet(planet) {
 		switch(planet.type) {
 			case 'rock':
@@ -100,6 +106,10 @@
 
 		model.planets.forEach(function(planet) {
 			drawPlanet(planet);
+		})
+
+		model.portals.forEach(function(portal) {
+			drawPortal(portal);
 		})
 
 		model.fragments.forEach(fragment => {
