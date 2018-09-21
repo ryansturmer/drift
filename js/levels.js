@@ -360,7 +360,9 @@ var levels = [
 				b : {x :535, y:550}
 			}
 		],
-		clouds : [],
+		clouds : [
+
+		],
 		goal : {
 			x : 100,
 			y : 200
@@ -369,6 +371,67 @@ var levels = [
 			x : 1000,
 			y : 75,
 			v : [-0.1,0.0],
+			mass : 1,
+			theta : 0,
+			phi : -2,
+			rotate : 0,
+		}},
+
+		{
+		name : "Untitled",
+		planets : [
+			{
+				x : 800,
+				y : 100,
+				mass : 250,
+				type : 'cracked',
+				angle : 0,
+				v : 0.09
+			},
+			{
+				x : 265,
+				y : 400,
+				mass : 150,
+				type : 'planet',
+				angle : 0,
+				v : 0.04
+			},/*
+			{
+				x : 135,
+				y : 250,
+				mass : 20,
+				type : 'rock',
+			}*/
+
+		],
+		portals : [
+			{
+				a : {x : 1020, y : 100},
+				b : {x :300, y:300}
+			}
+		],
+		clouds : [
+			{
+				x : 135,
+				y : 260,
+				drag : 0.15
+			},
+			{
+				x : 75,
+				y : 260,
+				drag : 0.15
+			}
+
+
+		],
+		goal : {
+			x : 95,
+			y : 185
+		},
+		ship : {
+			x : 875,
+			y : 530,
+			v : [-0.03,0.0],
 			mass : 1,
 			theta : 0,
 			phi : -2,

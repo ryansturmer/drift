@@ -234,27 +234,44 @@ model.update = function(ts) {
 		}
 
 		this.portals.forEach(portal => {
-			if(portal.disable) {
-				if((dist(portal.a, ship) > 20) && (dist(portal.b, ship) > 20)) {
-					portal.disable = false;
+			if(portal.tenant) {
+				if((dist(portal.a, portal.tenant) > 20) && (dist(portal.b, portal.tenant) > 20)) {
+					portal.tenant = null;
 				}
 			} else {
 				if(dist(portal.a, ship) < 20) {
 					this.sparkle(this.ship);
-					portal.disable = true;
+					portal.tenant = ship;
 					ship.x = portal.b.x;
 					ship.y = portal.b.y;	
 					this.sparkle(this.ship);
 				}
 				else if(dist(portal.b, ship) < 20) {
 					this.sparkle(this.ship);
-					portal.disable = true;
+					portal.tenant = ship;
 					ship.x = portal.a.x;
 					ship.y = portal.a.y;
 					this.sparkle(this.ship);
 				} 	
+				this.fragments.forEach(fragment => {
+					if(dist(portal.a, fragment) < 20) {
+						this.sparkle(fragment);
+						portal.tenant = fragment;
+						fragment.x = portal.b.x;
+						fragment.y = portal.b.y;	
+						this.sparkle(fragment);
+					}
+					else if(dist(portal.b, fragment) < 20) {
+						this.sparkle(fragment);
+						portal.tenant = fragment;
+						fragment.x = portal.a.x;
+						fragment.y = portal.a.y;
+						this.sparkle(fragment);
+					} 	
 
+				})
 			}
+
 
 		});
 	}
