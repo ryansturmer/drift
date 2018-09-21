@@ -363,7 +363,7 @@ var levels = [
 		clouds : [],
 		goal : {
 			x : 100,
-			y : 500
+			y : 200
 		},
 		ship : {
 			x : 1000,
