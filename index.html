@@ -102,14 +102,14 @@
   		ctx.fillStyle = "black";
 		ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
 
+		model.portals.forEach(function(portal) {
+			drawPortal(portal);
+		})
+
 		drawGoal(model.goal);
 
 		model.planets.forEach(function(planet) {
 			drawPlanet(planet);
-		})
-
-		model.portals.forEach(function(portal) {
-			drawPortal(portal);
 		})
 
 		model.fragments.forEach(fragment => {
@@ -186,9 +186,11 @@
 				model.fireGun();
 				break;
 			case "n":
+			case "N":
 				model.nextLevel();
 				break;
 			case "p":
+			case "P":
 				model.prevLevel();
 				break;
 			case "1":

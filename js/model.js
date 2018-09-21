@@ -235,20 +235,25 @@ model.update = function(ts) {
 
 		this.portals.forEach(portal => {
 			if(portal.disable) {
-				if((dist(portal.a, ship) > 32) && (dist(portal.b, ship) > 32)) {
+				if((dist(portal.a, ship) > 20) && (dist(portal.b, ship) > 20)) {
 					portal.disable = false;
 				}
 			} else {
-				if(dist(portal.a, ship) < 32) {
+				if(dist(portal.a, ship) < 20) {
+					this.sparkle(this.ship);
 					portal.disable = true;
 					ship.x = portal.b.x;
-					ship.y = portal.b.y;
+					ship.y = portal.b.y;	
+					this.sparkle(this.ship);
 				}
-				else if(dist(portal.b, ship) < 32) {
+				else if(dist(portal.b, ship) < 20) {
+					this.sparkle(this.ship);
 					portal.disable = true;
 					ship.x = portal.a.x;
 					ship.y = portal.a.y;
-				} 				
+					this.sparkle(this.ship);
+				} 	
+
 			}
 
 		});
@@ -275,19 +280,23 @@ model.fireGun = function() {
 	});
 }
 
-model.die = function() {
-	console.log('dying')
-	this.state = 'dying';
+model.sparkle = function(loc) {
 	for(var i=0; i<20; i++) {
 		var v = 2.5*(1+Math.random())/2.0;
 		var angle = Math.random()*6.28;
 		this.particles.push({
-			x : this.ship.x,
-			y :  this.ship.y,
+			x : loc.x,
+			y :  loc.y,
 			lifespan : Math.random()*50,
 			v : [v*Math.cos(angle), v*Math.sin(angle)]
 		})
 	}
+}
+
+model.die = function() {
+	console.log('dying')
+	this.state = 'dying';
+	this.sparkle(this.ship);
 }
 
 model.win = function() {

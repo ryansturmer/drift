@@ -346,7 +346,7 @@ var levels = [
 				v : 0.04
 			},
 			{
-				x : 150,
+				x : 175,
 				y : 450,
 				mass : 75,
 				type : 'rock',
