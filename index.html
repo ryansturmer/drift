@@ -208,8 +208,43 @@
 		} 
 	});
 
-	document.addEventListener('keyup', (event) => {
+
+	var currentPlanet = null;
+	var currentOffset = null;
+
+      function getMousePos(canvas, evt) {
+        var rect = canvas.getBoundingClientRect();
+        return {
+          x: evt.clientX - rect.left,
+          y: evt.clientY - rect.top
+        };
+      }
+
+	document.addEventListener('keyup', (evt) => {
 		model.stopShipRotate();
+	});
+
+	canvas.addEventListener('mousedown', (evt) => {
+		model.planets.forEach((planet, planet_idx) =>  {
+			var pos = getMousePos(canvas, evt);
+			if(dist(pos, planet) < 32) {
+				currentPlanet = planet;
+				currentOffset = {x : planet.x - pos.x, y : planet.y - pos.y};
+			}
+		});
+	});
+
+	canvas.addEventListener('mouseup', (evt) => {
+		currentPlanet = null;
+		currentOrigin = null;
+	});
+
+	canvas.addEventListener('mousemove', (evt) => {
+		var pos = getMousePos(canvas, evt);
+		if(currentPlanet) {
+			currentPlanet.x = pos.x + currentOffset.x;
+			currentPlanet.y = pos.y + currentOffset.y;
+		}
 	});
 
 	function step(ts) {
