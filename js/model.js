@@ -395,3 +395,12 @@ model.getUID = function() {
 	this.uid += 1;
 	return this.uid;
 }
+
+model.pause = function() {
+	this.savedState = this.state;
+	this.state = 'paused';
+}
+
+model.resume = function() {
+	this.state = this.savedState;
+}

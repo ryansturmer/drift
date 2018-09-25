@@ -38,6 +38,7 @@
 
 
 	document.addEventListener('keydown', (event) => {
+		event.preventDefault();
 		if(model.state == 'win') {
 			if(event.key == 'Enter') {
 				model.nextLevel();				
@@ -70,6 +71,10 @@
 			case "p":
 			case "P":
 				model.prevLevel();
+				break;
+			case "Tab":
+				if(model.state === 'paused') { model.resume(); }
+				else { model.pause();}
 				break;
 			case "1":
 			case "2":
