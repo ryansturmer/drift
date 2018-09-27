@@ -18,12 +18,33 @@ canvas {
 	solid #222222;
 }
 
-img {
-	display:none ;
+.asset {
+	display:none;
 }
 
 body {
 	margin: 0; 
 	padding: 0; 
 	background: #111111;
+}
+
+#palette {
+	position: absolute; 
+	right: 10px; 
+	top: 10px; 
+	width: 75px; 
+	border: 1px solid gray;
+	border-radius: 10px;
+	font-family: MrPixel;
+	color: white;
+	/*opacity: 0.5;*/
+	padding: 10px;
+	display: none;
+	 -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
 }

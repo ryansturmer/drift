@@ -24,24 +24,17 @@ var model = {
 };
 
 model.update = function(ts) {
+
+		// First run through
 		if(this.ts === null) {
 			this.ts = ts;
 			return;
 		}
-
-		switch(this.state) {
-			case 'dying':
-				if(this.particles.length == 0) {
-					this.state = 'dead';
-					return;
-				}
-			case 'playing':
-			break;
-			default:
-				this.ts = null; return;
-			break;
-		}
-
+		// Update time
+		var	dt = ts - this.ts;
+		this.ts = ts;
+		
+		// Wizards only, fool
 		this.particles.forEach((particle, idx) => {
 			particle.x += particle.v[0]*dt;
 			particle.y += particle.v[1]*dt;
@@ -51,14 +44,26 @@ model.update = function(ts) {
 			}
 		});
 
+		switch(this.state) {
+			case 'dying':
+				if(this.particles.length == 0) {
+					this.state = 'dead';
+					return;
+				}
+				break;
+			case 'playing':
+			break;
+			default:
+				this.ts = null; return;
+			break;
+		}
+
+		
+
 		// If dying, only process particles
 		if(this.state === 'dying') { return; }
 
 		var ship = this.ship;
-
-		// Update time
-		dt = ts - this.ts;
-		this.ts = ts;
 
 		// Projectile-planet and Projectile-fragment collision
 		this.projectiles.forEach((projectile, projectile_idx) => {
@@ -365,7 +370,31 @@ model.loadLevel = function(level) {
 	this.title.text = level.name;
 	this.title.lifespan = 3000;
 }
+model.getCurrentLevelState = function() {
+	var state = {
+		planets : [],
+		portals : [],
+		clouds : [],
+		name : [],
+		goal : null,
+		ship : null,
+		name : 'Untitled'
+	};
+	this.planets.forEach(planet => {
+		state.planets.push(Object.assign({}, planet));
+	})
+	this.portals.forEach(portal => {
+		state.portals.push(Object.assign({}, portal));
+	})
+	this.clouds.forEach(cloud => {
+		state.clouds.push(Object.assign({}, cloud));
+	})
+	state.name = this.title.text;
+	state.goal = Object.assign({}, this.goal);
+	state.ship = Object.assign({}, this.ship);
+	return state;
 
+}
 model.nextLevel = function() {
 	this.level = (this.level + 1) % this.levels.length;
 	this.loadLevel(this.levels[this.level]);
@@ -403,4 +432,30 @@ model.pause = function() {
 
 model.resume = function() {
 	this.state = this.savedState;
+}
+
+model.saveCurrentLevelState = function() {
+	this.levels[this.level] = this.getCurrentLevelState();
+}
+
+model.newPlanet = function(x,y,mass,type) {
+	switch(type) {
+		case 'planet':
+			var newPlanet = {x:x,y:y,mass:mass,type:'planet'}
+			this.planets.push(newPlanet);
+			this.sparkle(newPlanet);
+			break;
+		case 'cracked':
+			var newPlanet = {x:x,y:y,mass:mass,type:'cracked',angle:0, v: 0.05}
+			this.planets.push(newPlanet);
+			this.sparkle(newPlanet);
+			break;
+
+		case 'rock':
+			var newPlanet = {x:x,y:y,mass:mass,type:'rock'}
+			this.planets.push(newPlanet);
+			this.sparkle(newPlanet);
+			break;
+
+	}
 }

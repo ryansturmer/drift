@@ -16,6 +16,42 @@ function dist(a,b) {
 function DriftView(canvas) {
 	this.canvas = canvas;
 	this.ctx = canvas.getContext("2d");
+	this.palette = document.getElementById('palette');
+	this.addPaletteButton(img_planet, 'Planet', evt => {
+		this.model.newPlanet(this.canvas.width/2, this.canvas.height/2, 150, 'planet');
+	});
+	this.addPaletteButton(img_cracked, 'Cracked Planet', evt => {
+		this.model.newPlanet(this.canvas.width/2, this.canvas.height/2, 150, 'cracked');
+	});
+
+	this.addPaletteButton(img_rock, 'Rock', evt => {
+		this.model.newPlanet(this.canvas.width/2, this.canvas.height/2, 150, 'rock');
+	});
+
+	this.lastModelState = null;
+
+}
+
+DriftView.prototype.addPaletteButton = function(image, text, clickHandler) {
+	var containerElement = document.createElement('div');
+	var imageElement = document.createElement('img');
+	imageElement.src = image.src;
+	imageElement.style = 'margin-bottom: 5px;'
+	imageElement.draggable = false;
+
+	containerElement.appendChild(imageElement);
+	containerElement.style = 'margin-bottom: 15px;'
+	if(text) {
+		var textElement = document.createElement('div');
+		textElement.innerHTML = text;		
+		containerElement.appendChild(textElement);
+	}
+
+	if(clickHandler) {
+		containerElement.addEventListener('click', clickHandler);		
+	}
+
+	this.palette.appendChild(containerElement);
 }
 
 DriftView.prototype.setModel = function(model) {
@@ -129,6 +165,14 @@ DriftView.prototype.draw = function() {
 			ctx.globalAlpha = 1;
 		}
 	}
-
+	if(this.model.state != this.lastModelState) {
+		if(this.model.state === 'paused') {
+			console.log("paused!")
+			this.palette.style.display = 'block';
+		} else {
+			this.palette.style.display = 'none';
+		}		
+	}
+	this.lastModelState = this.model.state;
 }
 

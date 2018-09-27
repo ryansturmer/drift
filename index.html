@@ -7,18 +7,23 @@
 		<meta property="og:description" content="A puzzle game about drifting through space" />
 	</head>	
 	<body>
-		<img id="img-ship" src="images/ship-med.png">
-		<img id="img-goal" src="images/gem-med.png">
-		<img id="img-planet" src="images/planet-med.png">
-		<img id="img-rock" src="images/rock-med.png">
-		<img id="img-cracked" src="images/planet-cracked-med.png">
-		<img id="img-fragment" src="images/fragment-med.png">
-		<img id="img-you-died" src="images/you-died-med.png">
-		<img id="img-you-win" src="images/you-win-med.png">
-		<img id="img-cloud" src="images/cloud.png">
-		<img id="img-portal" src="images/portal-med.png">
+		<img class="asset" id="img-ship" src="images/ship-med.png">
+		<img class="asset" id="img-goal" src="images/gem-med.png">
+		<img class="asset" id="img-planet" src="images/planet-med.png">
+		<img class="asset" id="img-rock" src="images/rock-med.png">
+		<img class="asset" id="img-cracked" src="images/planet-cracked-med.png">
+		<img class="asset" id="img-fragment" src="images/fragment-med.png">
+		<img class="asset" id="img-you-died" src="images/you-died-med.png">
+		<img class="asset" id="img-you-win" src="images/you-win-med.png">
+		<img class="asset" id="img-cloud" src="images/cloud.png">
+		<img class="asset" id="img-portal" src="images/portal-med.png">
 		<div style="text-align: center; margin-top: 10px;">
-		<canvas id="canvas" width="1200" height="600"/>
+			<div style="width: 1200; height: 600; display: inline-block; position: relative;">
+				<canvas id="canvas" width="1200" height="600"> 
+			</canvas>
+		<div id="palette" >
+		</div>
+		</div>
 		</div>
 	</body>
 
@@ -38,7 +43,7 @@
 
 
 	document.addEventListener('keydown', (event) => {
-		event.preventDefault();
+		//event.preventDefault();
 		if(model.state == 'win') {
 			if(event.key == 'Enter') {
 				model.nextLevel();				
@@ -68,6 +73,11 @@
 			case "N":
 				model.nextLevel();
 				break;
+
+			case "s":
+			case "S":
+				model.saveCurrentLevelState();
+				break;
 			case "p":
 			case "P":
 				model.prevLevel();
@@ -94,45 +104,61 @@
 	var view = new DriftView(canvas);
 	view.setModel(model);
 	var currentItem = null;
-	var currentOffset = null;
+	var dragItem = null;
+	var dragOffset = null;
 
-      function getMousePos(canvas, evt) {
-        var rect = canvas.getBoundingClientRect();
-        return {
-          x: evt.clientX - rect.left,
-          y: evt.clientY - rect.top
-        };
-      }
+	function getMousePos(canvas, evt) {
+		var rect = canvas.getBoundingClientRect();
+		return {
+			x: evt.clientX - rect.left,
+			y: evt.clientY - rect.top
+		};
+	}
 
 	document.addEventListener('keyup', (evt) => {
 		model.stopShipRotate();
 	});
 
 	canvas.addEventListener('mousedown', (evt) => {
+		if(model.state != 'paused') { return; }
 		var pos = getMousePos(canvas, evt);
 		model.planets.forEach((planet, planet_idx) =>  {
 			if(dist(pos, planet) < 32) {
+				dragItem = planet;
 				currentItem = planet;
-				currentOffset = {x : planet.x - pos.x, y : planet.y - pos.y};
+				dragOffset = {x : planet.x - pos.x, y : planet.y - pos.y};
 			}
 		});
 		
 		if(dist(pos, model.ship) < 20) {
+			dragItem = model.ship;
 			currentItem = model.ship;
-			currentOffset = {x : model.ship.x - pos.x, y : model.ship.y - pos.y};
+			dragOffset = {x : model.ship.x - pos.x, y : model.ship.y - pos.y};
 		}
+		
+		if(dist(pos, model.goal) < 20) {
+			dragItem = model.goal;
+			currentItem = model.goal;
+			dragOffset = {x : model.goal.x - pos.x, y : model.goal.y - pos.y};
+		}
+
 	});
 
 	canvas.addEventListener('mouseup', (evt) => {
-		currentItem = null;
+		if(model.state != 'paused') { return; }
+		if(currentItem === this.model.goal) {
+			this.model.levels[this.model.level].goal.x = this.model.goal.x;
+		}
+		dragItem = null;
 		currentOrigin = null;
 	});
 
 	canvas.addEventListener('mousemove', (evt) => {
+		if(model.state != 'paused') { return; }
 		var pos = getMousePos(canvas, evt);
-		if(currentItem) {
-			currentItem.x = pos.x + currentOffset.x;
-			currentItem.y = pos.y + currentOffset.y;
+		if(dragItem) {
+			currentItem.x = pos.x + dragOffset.x;
+			currentItem.y = pos.y + dragOffset.y;
 		}
 	});
 
