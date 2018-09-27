@@ -34,7 +34,7 @@ model.update = function(ts) {
 		var	dt = ts - this.ts;
 		this.ts = ts;
 		
-		// Wizards only, fool
+		// Wizards only, fools
 		this.particles.forEach((particle, idx) => {
 			particle.x += particle.v[0]*dt;
 			particle.y += particle.v[1]*dt;
@@ -44,6 +44,11 @@ model.update = function(ts) {
 			}
 		});
 
+		// Fade out the title
+		if(this.title.lifespan > 0) {
+			this.title.lifespan -= dt;
+		}
+		
 		switch(this.state) {
 			case 'dying':
 				if(this.particles.length == 0) {
@@ -233,11 +238,6 @@ model.update = function(ts) {
 		// Ship rotation
 		this.ship.phi += this.ship.rotate*dt;
 
-		// Fade out the title
-		if(this.title.lifespan > 0) {
-			this.title.lifespan -= dt;
-		}
-
 		this.portals.forEach(portal => {
 			if(portal.tenant) {
 				if((dist(portal.a, portal.tenant) > 20) && (dist(portal.b, portal.tenant) > 20)) {
@@ -348,12 +348,12 @@ model.loadLevel = function(level) {
 	this.portals = level.portals || [];
 
 	level.planets.forEach(planet => {
-		this.planets.push(planet);
+		this.planets.push(Object.assign({}, planet));
 	})
 
 	this.clouds = [];
 	(level.clouds || []).forEach(cloud => {
-		this.clouds.push(cloud);
+		this.clouds.push(Object.assign({}, cloud));
 	});
 
 	//this.planets = level.planets;
