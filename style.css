@@ -29,6 +29,7 @@ body {
 }
 
 #palette {
+	background-color: rgba(0,0,0,0.5);
 	position: absolute; 
 	right: 10px; 
 	top: 10px; 
@@ -37,7 +38,6 @@ body {
 	border-radius: 10px;
 	font-family: MrPixel;
 	color: white;
-	/*opacity: 0.5;*/
 	padding: 10px;
 	display: none;
 	 -webkit-touch-callout: none; /* iOS Safari */
@@ -47,4 +47,12 @@ body {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome and Opera */
+}
+
+#palette img {
+	opacity: 0.8;
+}
+
+#palette img:hover {
+	opacity: 1.0;
 }
