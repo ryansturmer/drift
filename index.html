@@ -75,7 +75,13 @@
 				break;
 
 			case " ":
-				model.fireGun();
+			console.log('togglem')
+				if(model.state === 'paused') {
+					var p = document.getElementById('palette');
+					p.style.display = p.style.display === 'block' ? 'none' : 'block';
+				} else {
+					model.fireGun();					
+				}
 				break;
 			case "n":
 			case "N":
