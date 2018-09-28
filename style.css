@@ -33,12 +33,12 @@ body {
 	position: absolute; 
 	right: 10px; 
 	top: 10px; 
-	width: 75px; 
+	width: 125px;
+	height: 550; 
 	border: 1px solid gray;
 	border-radius: 10px;
 	font-family: MrPixel;
 	color: white;
-	padding: 10px;
 	display: none;
 	 -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -49,10 +49,28 @@ body {
                                   supported by Chrome and Opera */
 }
 
+#palette-items {
+	margin-left: 10px;
+	margin-right: 10px;
+}
 #palette img {
 	opacity: 0.8;
 }
 
 #palette img:hover {
 	opacity: 1.0;
+}
+
+.palette-tab {
+	font-size: 0.75em;
+	display:inline;
+	opacity: 0.8;
+}
+.palette-tab:hover {
+	opacity: 1.0;
+}
+
+#palette-tabs {
+	white-space: nowrap;
+	margin-bottom: 10px;
 }

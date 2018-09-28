@@ -459,3 +459,10 @@ model.newPlanet = function(x,y,mass,type) {
 
 	}
 }
+
+model.newCloud = function(x,y,drag) {
+	var newCloud = {x:x,y:y,drag:drag}
+	this.clouds.push(newCloud);
+	this.sparkle(newCloud);
+}
+

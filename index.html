@@ -21,8 +21,16 @@
 			<div style="width: 1200; height: 600; display: inline-block; position: relative;">
 				<canvas id="canvas" width="1200" height="600"> 
 			</canvas>
-		<div id="palette" >
+
+		<div id="palette">
+			<div id="palette-tabs">
+				<div class="palette-tab" id="palette-tab-items">Items</div>
+				<div class="palette-tab" id="palette-tab-properties">Properties</div>
+			</div>
+			<div id="palette-items" style=""></div>
+			<div id="palette-properties" style="display: none;">Properties will go here, eventually.</div>
 		</div>
+
 		</div>
 		</div>
 	</body>
@@ -43,7 +51,7 @@
 
 
 	document.addEventListener('keydown', (event) => {
-		event.preventDefault();
+		//event.preventDefault();
 		if(model.state == 'win') {
 			if(event.key == 'Enter') {
 				model.nextLevel();				
@@ -84,6 +92,7 @@
 				model.prevLevel();
 				break;
 			case "Tab":
+				event.preventDefault();
 				if(model.state === 'paused') { model.resume(); }
 				else { model.pause();}
 				break;
@@ -131,6 +140,14 @@
 			}
 		});
 		
+		model.clouds.forEach((cloud, cloud_idx) =>  {
+			if(dist(pos, cloud) < 32) {
+				dragItem = cloud;
+				currentItem = cloud;
+				dragOffset = {x : cloud.x - pos.x, y : cloud.y - pos.y};
+			}
+		});
+
 		if(dist(pos, model.ship) < 20) {
 			dragItem = model.ship;
 			currentItem = model.ship;
@@ -142,6 +159,7 @@
 			currentItem = model.goal;
 			dragOffset = {x : model.goal.x - pos.x, y : model.goal.y - pos.y};
 		}
+
 
 	});
 
@@ -158,6 +176,16 @@
 			currentItem.x = pos.x + dragOffset.x;
 			currentItem.y = pos.y + dragOffset.y;
 		}
+	});
+
+	document.getElementById('palette-tab-items').addEventListener('click', evt => {
+		document.getElementById('palette-items').style.display = 'block';
+		document.getElementById('palette-properties').style.display = 'none';
+	});
+
+	document.getElementById('palette-tab-properties').addEventListener('click', evt => {
+		document.getElementById('palette-items').style.display = 'none';
+		document.getElementById('palette-properties').style.display = 'block';
 	});
 
 	function step(ts) {

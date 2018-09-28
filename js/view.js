@@ -17,6 +17,9 @@ function DriftView(canvas) {
 	this.canvas = canvas;
 	this.ctx = canvas.getContext("2d");
 	this.palette = document.getElementById('palette');
+	this.toolbox = 	document.getElementById('palette-items');
+	this.properties = 	document.getElementById('palette-properties');
+
 	this.addPaletteButton(img_planet, 'Planet', evt => {
 		this.model.newPlanet(this.canvas.width/2, this.canvas.height/2, 150, 'planet');
 	});
@@ -26,6 +29,10 @@ function DriftView(canvas) {
 
 	this.addPaletteButton(img_rock, 'Rock', evt => {
 		this.model.newPlanet(this.canvas.width/2, this.canvas.height/2, 150, 'rock');
+	});
+
+	this.addPaletteButton(img_cloud, 'Cloud', evt => {
+		this.model.newCloud(this.canvas.width/2, this.canvas.height/2, 0.25);
 	});
 
 	this.lastModelState = null;
@@ -51,8 +58,9 @@ DriftView.prototype.addPaletteButton = function(image, text, clickHandler) {
 		containerElement.addEventListener('click', clickHandler);		
 	}
 
-	this.palette.appendChild(containerElement);
+	this.toolbox.appendChild(containerElement);
 }
+
 
 DriftView.prototype.setModel = function(model) {
 	this.model = model;
