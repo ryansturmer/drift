@@ -53,6 +53,13 @@ body {
 	margin-left: 10px;
 	margin-right: 10px;
 }
+#palette-properties {
+	text-align: left;
+	margin-left: 5px;
+	margin-right: 5px;
+
+}
+
 #palette img {
 	opacity: 0.8;
 }
@@ -70,7 +77,22 @@ body {
 	opacity: 1.0;
 }
 
+#palette-tab-items {
+	text-decoration: underline;
+}
 #palette-tabs {
 	white-space: nowrap;
 	margin-bottom: 10px;
+}
+
+input {
+	background-color: black;
+	border: 1px solid gray;
+	margin: 0px;
+	padding: 0px;
+	display: block;
+	width: 100%;
+	color: white;
+	border-radius: 3px;
+	box-sizing: border-box;
 }

@@ -1,6 +1,7 @@
 var model = {
 	uid : 0,
 	ship : {
+		class : 'ship',
 		mass : 1,
 		theta : 0,
 		phi : 0,
@@ -199,8 +200,8 @@ model.update = function(ts) {
 			var f = G*ship.mass*planet.mass/(r*r);
 			var a = f*ship.mass;
 			var dv = [ru[0]*a*dt, ru[1]*a*dt]
-			ship.v[0] += dv[0]
-			ship.v[1] += dv[1]
+			ship.vx += dv[0]
+			ship.vy += dv[1]
 		});
 
 		this.fragments.forEach(fragment => {
@@ -209,8 +210,8 @@ model.update = function(ts) {
 			var f = G*ship.mass*fragment.mass/(r*r);
 			var a = f*ship.mass;
 			var dv = [ru[0]*a*dt, ru[1]*a*dt]
-			ship.v[0] += dv[0]
-			ship.v[1] += dv[1]
+			ship.vx += dv[0]
+			ship.vy += dv[1]
 		});
 
 		this.fragments.forEach(fragment => {
@@ -220,14 +221,14 @@ model.update = function(ts) {
 
 		this.clouds.forEach(cloud => {
 			if(dist(ship, cloud) < 32) {
-				ship.v[0] = ship.v[0] * (1-cloud.drag)
-				ship.v[1] = ship.v[1] * (1-cloud.drag)
+				ship.vx = ship.vx * (1-cloud.drag)
+				ship.vy = ship.vy * (1-cloud.drag)
 			}
 		});
 
 		// Move the ship 
-		ship.x += ship.v[0]*dt;
-		ship.y += ship.v[1]*dt;
+		ship.x += ship.vx*dt;
+		ship.y += ship.vy*dt;
 
 		// Projectile motion
 		this.projectiles.forEach(projectile => {
@@ -340,30 +341,70 @@ model.loadLevels = function(levels, startLevel) {
 	this.loadLevel(this.levels[this.level]);
 }
 
+model.addPlanet = function(planetData) {
+	var newPlanet = Object.assign({}, planetData);
+	newPlanet.class = 'planet';
+	this.planets.push(newPlanet)
+}
+
+model.addCloud = function(cloudData) {
+	var newCloud = Object.assign({}, cloudData);
+	newCloud.class = 'cloud';
+	this.clouds.push(newCloud)
+}
+
+model.getProperties = function(obj) {
+	switch(obj['class']) {
+		case undefined:
+			return []
+			break;
+		case 'planet':
+			switch(obj.type) {
+				case 'rock':
+					return ['x','y','mass'];
+					break;
+				case 'cracked':
+					return ['x','y', 'mass', 'angle'];
+					break;
+				default:
+					return ['x','y','mass'];
+					break;
+			}
+			break;
+		case 'cloud':
+			return ['x','y','drag'];
+			break;
+		case 'goal':
+			return ['x','y'];
+			break;
+		case 'ship':
+			return ['x','y', 'vx','vy'];
+			break;
+	}
+}
+
 model.loadLevel = function(level) {
-	this.planets = [];
 	this.fragments = [];
 	this.projectiles = [];
 	this.particles = [];
 	this.portals = level.portals || [];
 
-	level.planets.forEach(planet => {
-		this.planets.push(Object.assign({}, planet));
+	this.planets = [];
+	(level.planets || []).forEach(planet => {
+		this.addPlanet(planet);
 	})
 
 	this.clouds = [];
 	(level.clouds || []).forEach(cloud => {
-		this.clouds.push(Object.assign({}, cloud));
+		this.addCloud(cloud);
 	});
 
-	//this.planets = level.planets;
-	this.goal = level.goal;
+	this.goal = Object.assign({}, level.goal);
+	
 	this.ship.x = level.ship.x;
 	this.ship.y = level.ship.y;
-	if(level.ship.v) {
-		this.ship.v = [level.ship.v[0], level.ship.v[1]];
-	}
-
+	this.ship.vx = level.ship.vx || 0;
+	this.ship.vy = level.ship.vy || 0;	
 	this.ship.theta = level.ship.theta || 0;
 	this.ship.phi = level.ship.phi || 0;
 	this.ship.mass = level.ship.mass || 1.0;
@@ -442,18 +483,18 @@ model.newPlanet = function(x,y,mass,type) {
 	switch(type) {
 		case 'planet':
 			var newPlanet = {x:x,y:y,mass:mass,type:'planet'}
-			this.planets.push(newPlanet);
+			this.addPlanet(newPlanet);
 			this.sparkle(newPlanet);
 			break;
 		case 'cracked':
 			var newPlanet = {x:x,y:y,mass:mass,type:'cracked',angle:0, v: 0.05}
-			this.planets.push(newPlanet);
+			this.addPlanet(newPlanet);			
 			this.sparkle(newPlanet);
 			break;
 
 		case 'rock':
 			var newPlanet = {x:x,y:y,mass:mass,type:'rock'}
-			this.planets.push(newPlanet);
+			this.addPlanet(newPlanet);			
 			this.sparkle(newPlanet);
 			break;
 

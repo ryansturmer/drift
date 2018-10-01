@@ -29,6 +29,10 @@ function DriftView(canvas) {
 	this.palette = document.getElementById('palette');
 	this.toolbox = 	document.getElementById('palette-items');
 	this.properties = 	document.getElementById('palette-properties');
+	
+	// The item currently being edited, and its properties
+	this.editItem = null;
+	this.currentProperties = [];
 
 	this.addPaletteButton(this.images['img-planet'], 'Planet', evt => {
 		this.model.newPlanet(this.canvas.width/2, this.canvas.height/2, 150, 'planet');
@@ -69,6 +73,45 @@ DriftView.prototype.addPaletteButton = function(image, text, clickHandler) {
 	}
 
 	this.toolbox.appendChild(containerElement);
+}
+
+DriftView.prototype.showProperties = function(item) {
+	this.properties.innerHTML = "";
+	this.currentProperties = [];
+	this.editItem = null;
+	var props = this.model.getProperties(item);
+	if(!props || (props.length == 0)) { return; }
+	this.currentProperties = props;
+	this.editItem = item;
+	this.editControls = {};
+	props.forEach(property => {
+		var container = document.createElement('div');
+		
+		var lbl = document.createElement('div');
+		lbl.innerHTML = property;
+		
+		var input = document.createElement('input');
+		input.value = item[property];
+		input.addEventListener('change', evt => {
+			try {
+				var f = parseFloat(evt.target.value);
+				item[property] = f;
+			} catch(err) {
+				evt.cancel();
+			}
+		});
+		container.appendChild(lbl);
+		container.appendChild(input);
+		this.properties.appendChild(container);
+		this.editControls[property] = input;
+	});
+	console.log(this.editControls)
+}
+
+DriftView.prototype.updateProperties = function() {
+	for(var key in this.editControls) {
+		this.editControls[key].value = this.editItem[key];
+	}
 }
 
 DriftView.prototype.drawItem = function(item, name) {

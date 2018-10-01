@@ -7,6 +7,7 @@
 		<meta property="og:description" content="A puzzle game about drifting through space" />
 	</head>	
 	<body>
+
 		<img class="asset" id="img-ship" src="images/ship-med.png">
 		<img class="asset" id="img-goal" src="images/gem-med.png">
 		<img class="asset" id="img-planet" src="images/planet-med.png">
@@ -17,6 +18,7 @@
 		<img class="asset" id="img-you-win" src="images/you-win-med.png">
 		<img class="asset" id="img-cloud" src="images/cloud.png">
 		<img class="asset" id="img-portal" src="images/portal-med.png">
+		
 		<div style="text-align: center; margin-top: 10px;">
 			<div style="width: 1200; height: 600; display: inline-block; position: relative;">
 				<canvas id="canvas" width="1200" height="600"> 
@@ -28,7 +30,7 @@
 				<div class="palette-tab" id="palette-tab-properties">Properties</div>
 			</div>
 			<div id="palette-items" style=""></div>
-			<div id="palette-properties" style="display: none;">Properties will go here, eventually.</div>
+			<div id="palette-properties" style="display: none;">Click a thing to do a thing.  Try it!</div>
 		</div>
 
 		</div>
@@ -71,7 +73,9 @@
 				break;
 
 			case "Enter":
-				model.restart();
+				if(model.state != 'paused') {
+					model.restart();					
+				}
 				break;
 
 			case " ":
@@ -98,6 +102,7 @@
 				break;
 			case "Tab":
 				event.preventDefault();
+				view.updateProperties();
 				if(model.state === 'paused') { model.resume(); }
 				else { model.pause();}
 				break;
@@ -110,7 +115,9 @@
 			case "7":
 			case "8":
 			case "9":
-				model.jumpToLevel(parseInt(event.key)-1);
+				if(model.state != 'paused') {
+					model.jumpToLevel(parseInt(event.key)-1);					
+				}
 				break;
 
 		} 
@@ -137,6 +144,7 @@
 	canvas.addEventListener('mousedown', (evt) => {
 		if(model.state != 'paused') { return; }
 		var pos = getMousePos(canvas, evt);
+
 		model.planets.forEach((planet, planet_idx) =>  {
 			if(dist(pos, planet) < 32) {
 				dragItem = planet;
@@ -165,7 +173,9 @@
 			dragOffset = {x : model.goal.x - pos.x, y : model.goal.y - pos.y};
 		}
 
-
+		if(currentItem) {
+			view.showProperties(currentItem);
+		}
 	});
 
 	canvas.addEventListener('mouseup', (evt) => {
@@ -180,17 +190,23 @@
 		if(dragItem) {
 			currentItem.x = pos.x + dragOffset.x;
 			currentItem.y = pos.y + dragOffset.y;
+			view.updateProperties();
 		}
 	});
 
 	document.getElementById('palette-tab-items').addEventListener('click', evt => {
 		document.getElementById('palette-items').style.display = 'block';
 		document.getElementById('palette-properties').style.display = 'none';
+		document.getElementById('palette-tab-items').style['text-decoration'] = 'underline';
+		document.getElementById('palette-tab-properties').style['text-decoration'] = 'none';
+
 	});
 
 	document.getElementById('palette-tab-properties').addEventListener('click', evt => {
 		document.getElementById('palette-items').style.display = 'none';
 		document.getElementById('palette-properties').style.display = 'block';
+		document.getElementById('palette-tab-items').style['text-decoration'] = 'none';
+		document.getElementById('palette-tab-properties').style['text-decoration'] = 'underline';
 	});
 
 	function step(ts) {

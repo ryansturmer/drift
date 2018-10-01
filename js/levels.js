@@ -15,7 +15,8 @@ var levels = [
 		ship : {
 			x : 150,
 			y : 550,
-			v : [0.05,0.01],
+			vx : 0.05,
+			vy : 0.01
 		}
 	},
 	{
@@ -41,7 +42,8 @@ var levels = [
 		ship : {
 			x : 50,
 			y : 300,
-			v : [0.03,0.0],
+			vx : 0.03, 
+			vy : 0,
 			mass : 1,
 			theta : 0,
 			phi : 0,
@@ -75,7 +77,8 @@ var levels = [
 		ship : {
 			x : 50,
 			y : 50,
-			v : [0.06,-0.005],
+			vx : 0.06, 
+			vy : -0.005,
 			mass : 1,
 			theta : 0.3,
 			phi : -0.4,
@@ -103,7 +106,8 @@ var levels = [
 		ship : {
 			x : 600,
 			y : 300,
-			v : [0.15,-0.2],
+			vx : 0.15, 
+			vy : -0.2,
 			mass : 1,
 			theta : 0.3,
 			phi : -0.4,
@@ -143,7 +147,8 @@ var levels = [
 		ship : {
 			x : 50,
 			y : 50,
-			v : [0.09,0.05],
+			vx : 0.09, 
+			vy : 0.05,
 			mass : 1,
 			theta : 0,
 			phi : 2.5,
@@ -189,7 +194,8 @@ var levels = [
 		ship : {
 			x : 100,
 			y : 150,
-			v : [0.1,0.0],
+			vx : 0.1, 
+			vy : 0,
 			mass : 1,
 			theta : 0,
 			phi : 0,
@@ -216,7 +222,8 @@ var levels = [
 		ship : {
 			x : 100,
 			y : 75,
-			v : [0.05,0.0],
+			vx : 0.05, 
+			vy : 0,
 			mass : 1,
 			theta : 0,
 			phi : -0.5,
@@ -263,7 +270,8 @@ var levels = [
 		ship : {
 			x : 1000,
 			y : 75,
-			v : [-0.05,0.0],
+			vx : -0.05, 
+			vy : 0,
 			mass : 1,
 			theta : 0,
 			phi : -2,
@@ -326,7 +334,8 @@ var levels = [
 		ship : {
 			x : 50,
 			y : 350,
-			v : [0.01,0.01],
+			vx : 0.01, 
+			vy : 0.01,
 			mass : 1,
 			theta : 0,
 			phi : -2,
@@ -370,7 +379,8 @@ var levels = [
 		ship : {
 			x : 1000,
 			y : 75,
-			v : [-0.1,0.0],
+			vx : -0.1, 
+			vy : 0,
 			mass : 1,
 			theta : 0,
 			phi : -2,
@@ -431,7 +441,8 @@ var levels = [
 		ship : {
 			x : 875,
 			y : 530,
-			v : [-0.03,0.0],
+			vx : -0.03, 
+			vy : 0,
 			mass : 1,
 			theta : 0,
 			phi : -2,
