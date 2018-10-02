@@ -108,7 +108,7 @@
 				else { model.pause();}
 				break;
 			case "Tab":
-				if(mode.state != 'paused') {
+				if(model.state != 'paused') {
 					event.preventDefault();
 				}
 				break;
@@ -200,6 +200,24 @@
 		}
 	});
 
+	canvas.addEventListener('dblclick', (evt) => {
+		if(model.state != 'paused') { return; }
+			var pos = getMousePos(canvas, evt);
+
+			model.planets.forEach((planet, planet_idx) =>  {
+				if(dist(pos, planet) < 32) {
+					model.destroyPlanet(planet);
+				}
+			});
+			
+			model.clouds.forEach((cloud, cloud_idx) =>  {
+				if(dist(pos, cloud) < 32) {
+					model.destroyCloud(cloud);
+				}
+			});
+			view.updateProperties();
+	});
+	
 	document.getElementById('palette-tab-items').addEventListener('click', evt => {
 		document.getElementById('palette-items').style.display = 'block';
 		document.getElementById('palette-properties').style.display = 'none';

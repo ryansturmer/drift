@@ -23,6 +23,39 @@ var model = {
 	},
 	level : 0
 };
+model.destroyPlanet = function(planet) {
+	var planet_idx = this.planets.indexOf(planet);
+	if(planet_idx === -1) { return; }
+
+	this.planets.splice(planet_idx, 1);
+	for(var i=0; i<20; i++) {
+		var angle = Math.random()*6.28;
+		var v = (1+Math.random())/2.0;
+		this.particles.push({
+			x : (planet.x + 32*Math.cos(angle)),
+			y : (planet.y + 32*Math.sin(angle)),
+			lifespan : Math.random()*800,
+			v : [v*Math.cos(angle), v*Math.sin(angle)]
+		})
+	}
+}
+
+model.destroyCloud = function(cloud) {
+	var cloud_idx = this.clouds.indexOf(cloud);
+	if(cloud_idx === -1) { return; }
+
+	this.clouds.splice(cloud_idx, 1);
+	for(var i=0; i<20; i++) {
+		var angle = Math.random()*6.28;
+		var v = (1+Math.random())/2.0;
+		this.particles.push({
+			x : (cloud.x + 32*Math.cos(angle)),
+			y : (cloud.y + 32*Math.sin(angle)),
+			lifespan : Math.random()*800,
+			v : [v*Math.cos(angle), v*Math.sin(angle)]
+		})
+	}
+}
 
 model.update = function(ts) {
 
