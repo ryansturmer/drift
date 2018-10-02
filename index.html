@@ -93,6 +93,7 @@
 
 			case "s":
 			case "S":
+				event.preventDefault();
 				model.saveCurrentLevelState();
 				model.showTitle('Saved', 1000)
 				break;
@@ -100,11 +101,14 @@
 			case "P":
 				model.prevLevel();
 				break;
-			case "Tab":
+			case "Escape":
 				event.preventDefault();
 				view.updateProperties();
 				if(model.state === 'paused') { model.resume(); }
 				else { model.pause();}
+				break;
+			case "Tab":
+				event.preventDefault();
 				break;
 			case "1":
 			case "2":
