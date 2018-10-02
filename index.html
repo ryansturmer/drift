@@ -108,7 +108,9 @@
 				else { model.pause();}
 				break;
 			case "Tab":
-				event.preventDefault();
+				if(mode.state != 'paused') {
+					event.preventDefault();
+				}
 				break;
 			case "1":
 			case "2":
