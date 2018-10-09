@@ -157,11 +157,39 @@ DriftView.prototype.drawText = function(text, style) {
 	this.ctx.fillText(text, (canvas.width/2)-(metrics.width/2), 300);
 }
 
+DriftView.prototype.drawGrid = function(pitch) {
+	var x = 0;
+	while(x < this.canvas.width) {
+		this.ctx.strokeStyle = '#333333';
+		this.ctx.lineWidth = 1;
+		this.ctx.beginPath();
+		this.ctx.moveTo(x,0);
+		this.ctx.lineTo(x,this.canvas.height);
+		this.ctx.stroke();
+		x += pitch;
+	}
+	var y = 0;
+	while(y < this.canvas.height) {
+		this.ctx.strokeStyle = '#333333';
+		this.ctx.lineWidth = 1;
+		this.ctx.beginPath();
+		this.ctx.moveTo(0,y);
+		this.ctx.lineTo(this.canvas.width,y);
+		this.ctx.stroke();
+		y += pitch;			
+	}
+
+}
+
 DriftView.prototype.draw = function() {
 	// Blank the screen
 	this.ctx.fillStyle = "black";
 	this.ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
-
+	
+	if(this.model.state === 'paused') {
+		this.drawGrid(100);
+	}
+	
 	this.model.portals.forEach(portal => {
 		this.drawItem(portal.a, 'img-portal');
 		this.drawItem(portal.b, 'img-portal');
@@ -222,6 +250,8 @@ DriftView.prototype.draw = function() {
 			this.palette.style.display = 'none';
 		}		
 	}
+
+	
 	this.lastModelState = this.model.state;
 }
 

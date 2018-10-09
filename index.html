@@ -7,7 +7,7 @@
 		<meta property="og:description" content="A puzzle game about drifting through space" />
 	</head>	
 	<body>
-
+		<input type="file" id="upload" style="display:none;"/>
 		<img class="asset" id="img-ship" src="images/ship-med.png">
 		<img class="asset" id="img-goal" src="images/gem-med.png">
 		<img class="asset" id="img-planet" src="images/planet-med.png">
@@ -22,18 +22,22 @@
 		<div style="text-align: center; margin-top: 10px;">
 			<div style="width: 1200; height: 600; display: inline-block; position: relative;">
 				<canvas id="canvas" width="1200" height="600"> 
-			</canvas>
+				</canvas>
 
-		<div id="palette">
-			<div id="palette-tabs">
-				<div class="palette-tab" id="palette-tab-items">Items</div>
-				<div class="palette-tab" id="palette-tab-properties">Properties</div>
+				<div id="palette">
+					<div id="palette-tabs">
+						<div class="palette-tab" id="palette-tab-items">Items</div>
+						<div class="palette-tab" id="palette-tab-properties">Properties</div>
+					</div>
+					<div id="palette-items" style=""></div>
+					<div id="palette-properties" style="display: none;">Click a thing to do a thing.  Try it!</div>
+					<div>
+						<span id="save-button">&#8595; DL LEVEL</span>
+						<br /><br />
+						<span id="load-button">&#8593; UL LEVEL</span>
+					</div>
+				</div>
 			</div>
-			<div id="palette-items" style=""></div>
-			<div id="palette-properties" style="display: none;">Click a thing to do a thing.  Try it!</div>
-		</div>
-
-		</div>
 		</div>
 	</body>
 
@@ -51,7 +55,18 @@
 	var canvas = document.getElementById("canvas");
 	var ctx = canvas.getContext("2d");
 
+	function download(filename, text) {
+	  var element = document.createElement('a');
+	  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+	  element.setAttribute('download', filename);
 
+	  element.style.display = 'none';
+	  document.body.appendChild(element);
+
+	  element.click();
+
+	  document.body.removeChild(element);
+	}
 	document.addEventListener('keydown', (event) => {
 		//event.preventDefault();
 		if(model.state == 'win') {
@@ -244,6 +259,28 @@
 		model.start();
 		window.requestAnimationFrame(step);		
 	}
+
+	document.getElementById('save-button').addEventListener('click', evt => {
+		evt.preventDefault();
+		download('level.drift', JSON.stringify(model.levels[model.level], null, 2))
+	});
+	
+	document.getElementById('load-button').addEventListener('click', evt => {
+		var elem = document.getElementById('upload');
+		elem.click();
+	});
+
+	document.getElementById('upload').addEventListener('change', evt => {
+		var files = evt.target.files; // FileList object
+		var file = files[0];
+		var reader = new FileReader();
+		reader.onload = function(e) {
+			var contents = e.target.result;
+			var level = JSON.parse(contents);
+			model.loadLevel(level);
+		};
+		reader.readAsText(file);
+	}, false);
 
 </script>
 </html>
