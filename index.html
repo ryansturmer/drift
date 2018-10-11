@@ -30,11 +30,14 @@
 						<div class="palette-tab" id="palette-tab-properties">Properties</div>
 					</div>
 					<div id="palette-items" style=""></div>
-					<div id="palette-properties" style="display: none;">Click a thing to do a thing.  Try it!</div>
+					<div id="palette-properties" style="display: none;"></div>
 					<div>
-						<span id="save-button">&#8595; DL LEVEL</span>
-						<br /><br />
-						<span id="load-button">&#8593; UL LEVEL</span>
+						<div id="save-button" style="text-align: left; margin-left: 10px; vertical-align: middle;">
+							<img  src="images/save.png" style="margin-right: 5px;">Save Level
+						</div>
+						<div style="text-align: left; margin-left: 10px;" id="load-button">
+							<img id="load-button" src="images/load.png" style="margin-right: 5px;">Load Level
+						</div>
 					</div>
 				</div>
 			</div>
@@ -196,6 +199,10 @@
 
 		if(currentItem) {
 			view.showProperties(currentItem);
+		} else {
+			currentItem = model.levels[model.level];
+			view.showProperties(currentItem);
+			throw new Error("Ya done messed up A-a-ron!")
 		}
 	});
 
@@ -249,9 +256,9 @@
 	});
 
 	function step(ts) {
-		model.update(ts);
 		view.draw();
 		window.requestAnimationFrame(step);
+		model.update(ts);
 	}
 
 	window.onload = function() {

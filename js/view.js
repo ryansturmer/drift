@@ -14,6 +14,15 @@ function dist(a,b) {
 	return Math.sqrt((b.y-a.y)**2 + (b.x - a.x)**2)
 }
 
+function formatProperty(n) {
+	try {
+		var val = Number.parseFloat(n).toPrecision(5);
+		return isNaN(val) ? n : val;
+	} catch(e) {
+		return val;
+	}
+}
+
 function DriftView(canvas) {
 	
 	// Load images
@@ -91,10 +100,10 @@ DriftView.prototype.showProperties = function(item) {
 		lbl.innerHTML = property;
 		
 		var input = document.createElement('input');
-		input.value = item[property];
+		input.value = formatProperty(item[property]);
 		input.addEventListener('change', evt => {
 			try {
-				var f = parseFloat(evt.target.value);
+				var f = formatProperty(item[property])
 				item[property] = f;
 			} catch(err) {
 				evt.cancel();
@@ -110,7 +119,7 @@ DriftView.prototype.showProperties = function(item) {
 
 DriftView.prototype.updateProperties = function() {
 	for(var key in this.editControls) {
-		this.editControls[key].value = this.editItem[key];
+		this.editControls[key].value = formatProperty(this.editItem[key]);
 	}
 }
 

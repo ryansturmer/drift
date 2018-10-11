@@ -21,7 +21,8 @@ var model = {
 		text : '',
 		lifespan : 0
 	},
-	level : 0
+	level : 0,
+	name : ''
 };
 model.destroyPlanet = function(planet) {
 	var planet_idx = this.planets.indexOf(planet);
@@ -370,6 +371,9 @@ model.restart = function() {
 
 model.loadLevels = function(levels, startLevel) {
 	this.levels = levels;
+	for(var i=0; i<levels.length; i++) {
+		levels[i].class = 'level';
+	}
 	this.level = startLevel || 0;
 	this.loadLevel(this.levels[this.level]);
 }
@@ -413,6 +417,9 @@ model.getProperties = function(obj) {
 		case 'ship':
 			return ['x','y', 'vx','vy'];
 			break;
+		case 'level':
+			return ['name'];
+			break;
 	}
 }
 
@@ -441,6 +448,7 @@ model.loadLevel = function(level) {
 	this.ship.theta = level.ship.theta || 0;
 	this.ship.phi = level.ship.phi || 0;
 	this.ship.mass = level.ship.mass || 1.0;
+	this.name = level.name
 	this.title.text = level.name;
 	this.title.lifespan = 3000;
 }
@@ -449,7 +457,6 @@ model.getCurrentLevelState = function() {
 		planets : [],
 		portals : [],
 		clouds : [],
-		name : [],
 		goal : null,
 		ship : null,
 		name : 'Untitled'
@@ -463,9 +470,10 @@ model.getCurrentLevelState = function() {
 	this.clouds.forEach(cloud => {
 		state.clouds.push(Object.assign({}, cloud));
 	})
-	state.name = this.title.text;
+	state.name = this.name;
 	state.goal = Object.assign({}, this.goal);
 	state.ship = Object.assign({}, this.ship);
+	state.name = this.title.text;
 	return state;
 
 }
