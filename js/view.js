@@ -201,6 +201,27 @@ DriftView.prototype.draw = function() {
 	
 	if(this.model.state === 'paused') {
 		this.drawGrid(100);
+
+		this.model.planets.forEach(planet => {
+			if(planet.type === 'cracked') {
+				this.ctx.strokeStyle = '#5555aa';
+				this.ctx.lineWidth = 2;
+				this.ctx.beginPath();
+				var length = 100;
+				this.ctx.moveTo(planet.x+length*Math.cos(planet.angle),planet.y+length*Math.sin(planet.angle));
+				this.ctx.lineTo(planet.x-length*Math.cos(planet.angle),planet.y-length*Math.sin(planet.angle));
+				this.ctx.stroke();
+			}
+		});
+
+		this.ctx.strokeStyle = '#008800';
+		this.ctx.lineWidth = 2;
+		this.ctx.beginPath();
+		var length = 100;
+		var ship = this.model.ship
+		this.ctx.moveTo(ship.x,ship.y);
+		this.ctx.lineTo(ship.x+1000*ship.vx,ship.y+1000*ship.vy);
+		this.ctx.stroke();
 	}
 	
 	this.model.portals.forEach(portal => {

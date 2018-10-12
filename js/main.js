@@ -18,6 +18,7 @@ function download(filename, text) {
 
   document.body.removeChild(element);
 }
+
 document.addEventListener('keydown', (event) => {
 	//event.preventDefault();
 	if(model.state == 'win') {
@@ -206,7 +207,6 @@ document.getElementById('palette-tab-properties').addEventListener('click', evt 
 	document.getElementById('palette-tab-properties').style['text-decoration'] = 'underline';
 });
 
-var last_ts = 0;
 function step(ts) {
 	model.update(ts);
 	view.draw();

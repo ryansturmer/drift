@@ -415,7 +415,7 @@ model.getProperties = function(obj) {
 			return ['x','y'];
 			break;
 		case 'ship':
-			return ['x','y', 'vx','vy'];
+			return ['x','y', 'vx','vy', 'phi'];
 			break;
 		case 'level':
 			return ['name'];
