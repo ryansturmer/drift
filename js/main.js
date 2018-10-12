@@ -208,15 +208,9 @@ document.getElementById('palette-tab-properties').addEventListener('click', evt 
 
 var last_ts = 0;
 function step(ts) {
-	var dt = (ts-last_ts);
-	if(dt > 32) {
-		last_ts = ts;
-		window.requestAnimationFrame(step);
-		model.update(ts);
-	} else {
-		window.requestAnimationFrame(step);
-	}
+	model.update(ts);
 	view.draw();
+	window.requestAnimationFrame(step);
 }
 
 window.onload = function() {
