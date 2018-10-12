@@ -103,7 +103,12 @@ DriftView.prototype.showProperties = function(item) {
 		input.value = formatProperty(item[property]);
 		input.addEventListener('change', evt => {
 			try {
-				var f = formatProperty(item[property])
+				//var f = formatProperty(item[property])
+				try {
+					var f = parseFloat(evt.target.value);
+				} catch(e) {
+					var f = evt.target.value;
+				}
 				item[property] = f;
 			} catch(err) {
 				evt.cancel();
@@ -114,7 +119,6 @@ DriftView.prototype.showProperties = function(item) {
 		this.properties.appendChild(container);
 		this.editControls[property] = input;
 	});
-	console.log(this.editControls)
 }
 
 DriftView.prototype.updateProperties = function() {

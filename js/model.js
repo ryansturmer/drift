@@ -514,6 +514,7 @@ model.pause = function() {
 
 model.resume = function() {
 	this.state = this.savedState;
+	console.log(this.ship)
 }
 
 model.saveCurrentLevelState = function() {
