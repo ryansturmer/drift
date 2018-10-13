@@ -46,7 +46,7 @@ function DriftView(canvas) {
 	this.addPaletteButton(this.images['img-planet'], 'Planet', evt => {
 		this.model.newPlanet(this.canvas.width/2, this.canvas.height/2, 150, 'planet');
 	});
-	this.addPaletteButton(this.images['img-cracked'], 'Cracked Planet', evt => {
+	this.addPaletteButton(this.images['img-cracked'], 'Cracked', evt => {
 		this.model.newPlanet(this.canvas.width/2, this.canvas.height/2, 150, 'cracked');
 	});
 
@@ -58,15 +58,22 @@ function DriftView(canvas) {
 		this.model.newCloud(this.canvas.width/2, this.canvas.height/2, 0.25);
 	});
 
+	this.addPaletteButton(this.images['img-portal'], 'Portal', evt => {
+		this.model.newPortal(this.canvas.width/2-100, this.canvas.height/2, this.canvas.width/2+100, this.canvas.height/2);
+	});
+
 	this.lastModelState = null;
 
 }
 
 DriftView.prototype.addPaletteButton = function(image, text, clickHandler) {
 	var containerElement = document.createElement('div');
+
 	var imageElement = document.createElement('img');
 	imageElement.src = image.src;
-	imageElement.style = 'margin-bottom: 5px;'
+	imageElement.width = 32;
+	imageElement.height = 32;
+	imageElement.style = 'margin-bottom: 5px; display: inline-block;'
 	imageElement.draggable = false;
 
 	containerElement.appendChild(imageElement);
@@ -89,7 +96,7 @@ DriftView.prototype.showProperties = function(item) {
 	this.currentProperties = [];
 	this.editItem = null;
 	var props = this.model.getProperties(item);
-	if(!props || (props.length == 0)) { return; }
+	if(!props) { return; }
 	this.currentProperties = props;
 	this.editItem = item;
 	this.editControls = {};
@@ -123,7 +130,14 @@ DriftView.prototype.showProperties = function(item) {
 
 DriftView.prototype.updateProperties = function() {
 	for(var key in this.editControls) {
-		this.editControls[key].value = formatProperty(this.editItem[key]);
+		try {
+			this.editControls[key].value = formatProperty(this.editItem[key]);
+		} catch(e) {
+			console.log(e)
+			console.log(this.editItem)
+			console.log(this.editControls)
+			console.log(key)
+		}
 	}
 }
 
@@ -199,9 +213,13 @@ DriftView.prototype.draw = function() {
 	this.ctx.fillStyle = "black";
 	this.ctx.fillRect(0,0,ctx.canvas.width,ctx.canvas.height);
 	
+	/*
+	 * Draw all the editor acoutrements
+	 */
 	if(this.model.state === 'paused') {
 		this.drawGrid(100);
 
+		// Cracked planet guide
 		this.model.planets.forEach(planet => {
 			if(planet.type === 'cracked') {
 				this.ctx.strokeStyle = '#5555aa';
@@ -214,6 +232,17 @@ DriftView.prototype.draw = function() {
 			}
 		});
 
+		// Portal links
+		this.model.portals.forEach(portal => {
+			this.ctx.strokeStyle = '#008800';
+			this.ctx.lineWidth = 2;
+			this.ctx.beginPath();
+			this.ctx.moveTo(portal.a.x,portal.a.y);
+			this.ctx.lineTo(portal.b.x,portal.b.y);
+			this.ctx.stroke();
+		})
+
+		// Ship trajectory
 		this.ctx.strokeStyle = '#008800';
 		this.ctx.lineWidth = 2;
 		this.ctx.beginPath();

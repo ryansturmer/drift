@@ -120,6 +120,8 @@ document.addEventListener('keyup', (evt) => {
 
 canvas.addEventListener('mousedown', (evt) => {
 	if(model.state != 'paused') { return; }
+	currentItem = null;
+
 	var pos = getMousePos(canvas, evt);
 
 	model.planets.forEach((planet, planet_idx) =>  {
@@ -138,6 +140,18 @@ canvas.addEventListener('mousedown', (evt) => {
 		}
 	});
 
+	model.portals.forEach(portal => {
+		if(dist(portal.a, pos) < 32) {
+			dragItem = portal.a;
+			currentItem = portal.a;
+			dragOffset = {x : portal.a.x - pos.x, y : portal.a.y - pos.y};
+		}
+		if(dist(portal.b, pos) < 32) {
+			dragItem = portal.b;
+			currentItem = portal.b;
+			dragOffset = {x : portal.b.x - pos.x, y : portal.b.y - pos.y};
+		}
+	})
 	if(dist(pos, model.ship) < 20) {
 		dragItem = model.ship;
 		currentItem = model.ship;
@@ -153,6 +167,7 @@ canvas.addEventListener('mousedown', (evt) => {
 	if(currentItem) {
 		view.showProperties(currentItem);
 	} else {
+		console.log("showing properties for level")
 		currentItem = model.levels[model.level];
 		view.showProperties(currentItem);
 	}
@@ -187,6 +202,12 @@ canvas.addEventListener('dblclick', (evt) => {
 		model.clouds.forEach((cloud, cloud_idx) =>  {
 			if(dist(pos, cloud) < 32) {
 				model.destroyCloud(cloud);
+			}
+		});
+
+		model.portals.forEach((portal, portal_idx) =>  {
+			if(dist(pos, portal.a) < 32 || dist(pos, portal.b) < 32) {
+				model.destroyPortal(portal);
 			}
 		});
 		view.updateProperties();

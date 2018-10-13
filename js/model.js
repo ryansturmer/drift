@@ -58,6 +58,30 @@ model.destroyCloud = function(cloud) {
 	}
 }
 
+model.destroyPortal = function(portal) {
+	var portal_idx = this.portals.indexOf(portal);
+	if(portal_idx === -1) { return; }
+
+	this.portals.splice(portal_idx, 1);
+
+	for(var i=0; i<20; i++) {
+		var angle = Math.random()*6.28;
+		var v = (1+Math.random())/2.0;
+		this.particles.push({
+			x : (portal.a.x + 32*Math.cos(angle)),
+			y : (portal.a.y + 32*Math.sin(angle)),
+			lifespan : Math.random()*800,
+			v : [v*Math.cos(angle), v*Math.sin(angle)]
+		})
+
+		this.particles.push({
+			x : (portal.b.x + 32*Math.cos(angle)),
+			y : (portal.b.y + 32*Math.sin(angle)),
+			lifespan : Math.random()*800,
+			v : [v*Math.cos(angle), v*Math.sin(angle)]
+		})
+	}
+}
 model.update = function(ts) {
 
 		// First run through
@@ -420,6 +444,9 @@ model.getProperties = function(obj) {
 		case 'level':
 			return ['name'];
 			break;
+		case 'portal':
+			return [];
+			break;
 	}
 }
 
@@ -547,5 +574,13 @@ model.newCloud = function(x,y,drag) {
 	var newCloud = {x:x,y:y,drag:drag}
 	this.clouds.push(newCloud);
 	this.sparkle(newCloud);
+}
+
+model.newPortal = function(x1,y1,x2,y2) {
+	var p1 = {x:x1,y:y1}
+	var p2 = {x:x2,y:y2}
+	this.portals.push({a:p1,b:p2});
+	this.sparkle(p1);
+	this.sparkle(p2);	
 }
 
