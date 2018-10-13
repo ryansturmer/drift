@@ -1,5 +1,11 @@
+/*
+ * This is the model
+ * Embodies the state of both the game and the editor
+ * Provides all the methods for creating/transforming entities
+ */
+
 var model = {
-	uid : 0,
+	uid : 0, // Unique id - used for identifying certain elements
 	ship : {
 		class : 'ship',
 		mass : 1,
@@ -8,37 +14,32 @@ var model = {
 		rotate : 0,
 		v : [0,0]
 	},
+	// Entities
 	planets : [],
 	clouds : [],
 	goal : {},
 	projectiles : [],
 	particles : [],
 	fragments : [],
- 	ts : null,
-	levels : [],
 	portals : [],
+	// 
+ 	ts : null,
+	// The title text shown at the middle of the level (like the title)
 	title : {
 		text : '',
 		lifespan : 0
 	},
-	level : 0,
-	name : ''
+	// Level information
+	level : 0,    // Integer index of the current level
+	levels : [],  // List of all levels 
 };
+
 model.destroyPlanet = function(planet) {
 	var planet_idx = this.planets.indexOf(planet);
 	if(planet_idx === -1) { return; }
 
 	this.planets.splice(planet_idx, 1);
-	for(var i=0; i<20; i++) {
-		var angle = Math.random()*6.28;
-		var v = (1+Math.random())/2.0;
-		this.particles.push({
-			x : (planet.x + 32*Math.cos(angle)),
-			y : (planet.y + 32*Math.sin(angle)),
-			lifespan : Math.random()*800,
-			v : [v*Math.cos(angle), v*Math.sin(angle)]
-		})
-	}
+	this.explode(planet);
 }
 
 model.destroyCloud = function(cloud) {
@@ -46,42 +47,17 @@ model.destroyCloud = function(cloud) {
 	if(cloud_idx === -1) { return; }
 
 	this.clouds.splice(cloud_idx, 1);
-	for(var i=0; i<20; i++) {
-		var angle = Math.random()*6.28;
-		var v = (1+Math.random())/2.0;
-		this.particles.push({
-			x : (cloud.x + 32*Math.cos(angle)),
-			y : (cloud.y + 32*Math.sin(angle)),
-			lifespan : Math.random()*800,
-			v : [v*Math.cos(angle), v*Math.sin(angle)]
-		})
-	}
+	this.explode(cloud);
 }
 
 model.destroyPortal = function(portal) {
 	var portal_idx = this.portals.indexOf(portal);
 	if(portal_idx === -1) { return; }
-
 	this.portals.splice(portal_idx, 1);
-
-	for(var i=0; i<20; i++) {
-		var angle = Math.random()*6.28;
-		var v = (1+Math.random())/2.0;
-		this.particles.push({
-			x : (portal.a.x + 32*Math.cos(angle)),
-			y : (portal.a.y + 32*Math.sin(angle)),
-			lifespan : Math.random()*800,
-			v : [v*Math.cos(angle), v*Math.sin(angle)]
-		})
-
-		this.particles.push({
-			x : (portal.b.x + 32*Math.cos(angle)),
-			y : (portal.b.y + 32*Math.sin(angle)),
-			lifespan : Math.random()*800,
-			v : [v*Math.cos(angle), v*Math.sin(angle)]
-		})
-	}
+	this.explode(portal.a);
+	this.explode(portal.b);
 }
+
 model.update = function(ts) {
 
 		// First run through
@@ -374,6 +350,19 @@ model.sparkle = function(loc) {
 	}
 }
 
+model.explode = function(loc) {
+	for(var i=0; i<20; i++) {
+		var angle = Math.random()*6.28;
+		var v = (1+Math.random())/2.0;
+		this.particles.push({
+			x : (loc.x + 32*Math.cos(angle)),
+			y : (loc.y + 32*Math.sin(angle)),
+			lifespan : Math.random()*800,
+			v : [v*Math.cos(angle), v*Math.sin(angle)]
+		})
+	}
+}
+
 model.die = function() {
 	console.log('dying')
 	this.state = 'dying';
@@ -476,7 +465,6 @@ model.loadLevel = function(level) {
 	this.ship.theta = level.ship.theta || 0;
 	this.ship.phi = level.ship.phi || 0;
 	this.ship.mass = level.ship.mass || 1.0;
-	this.name = level.name
 	this.title.text = level.name;
 	this.title.lifespan = 3000;
 }
@@ -498,7 +486,7 @@ model.getCurrentLevelState = function() {
 	this.clouds.forEach(cloud => {
 		state.clouds.push(Object.assign({}, cloud));
 	})
-	state.name = this.name;
+	state.name = this.levels[this.level].name;
 	state.goal = Object.assign({}, this.goal);
 	state.ship = Object.assign({}, this.ship);
 	state.name = this.title.text;
