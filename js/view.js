@@ -92,6 +92,7 @@ DriftView.prototype.addPaletteButton = function(image, text, clickHandler) {
 }
 
 DriftView.prototype.showProperties = function(item) {
+	console.log("Showing Properties: ", item)
 	this.properties.innerHTML = "";
 	this.currentProperties = [];
 	this.editItem = null;

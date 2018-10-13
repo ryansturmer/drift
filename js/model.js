@@ -466,6 +466,7 @@ model.loadLevel = function(level) {
 		this.addCloud(cloud);
 	});
 
+	console.log(this.clouds)
 	this.goal = Object.assign({}, level.goal);
 	
 	this.ship.x = level.ship.x;
@@ -571,7 +572,7 @@ model.newPlanet = function(x,y,mass,type) {
 }
 
 model.newCloud = function(x,y,drag) {
-	var newCloud = {x:x,y:y,drag:drag}
+	var newCloud = {x:x,y:y,drag:drag,class:'cloud'}
 	this.clouds.push(newCloud);
 	this.sparkle(newCloud);
 }
