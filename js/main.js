@@ -60,12 +60,12 @@ document.addEventListener('keydown', (event) => {
 			}
 			break;
 
-		case "s":
-		case "S":
-			event.preventDefault();
-			model.saveCurrentLevelState();
-			model.showTitle('Saved', 1000)
-			break;
+		//case "s":
+		//case "S":
+			//event.preventDefault();
+			//model.saveCurrentLevelState();
+			//model.showTitle('Saved', 1000)
+			//break;
 		case "p":
 		case "P":
 			if(model.state !== 'paused') {
@@ -177,6 +177,7 @@ canvas.addEventListener('mouseup', (evt) => {
 	if(model.state != 'paused') { return; }
 	dragItem = null;
 	currentOrigin = null;
+	model.saveCurrentLevelState();
 });
 
 canvas.addEventListener('mousemove', (evt) => {
@@ -187,6 +188,7 @@ canvas.addEventListener('mousemove', (evt) => {
 		currentItem.y = pos.y + dragOffset.y;
 		view.updateProperties();
 	}
+	model.saveCurrentLevelState();
 });
 
 canvas.addEventListener('dblclick', (evt) => {
@@ -211,6 +213,7 @@ canvas.addEventListener('dblclick', (evt) => {
 			}
 		});
 		view.updateProperties();
+		model.saveCurrentLevelState();
 });
 
 document.getElementById('palette-tab-items').addEventListener('click', evt => {

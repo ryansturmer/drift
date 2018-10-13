@@ -121,6 +121,7 @@ DriftView.prototype.showProperties = function(item) {
 			} catch(err) {
 				evt.cancel();
 			}
+			this.model.saveCurrentLevelState();
 		});
 		container.appendChild(lbl);
 		container.appendChild(input);
