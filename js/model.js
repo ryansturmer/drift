@@ -316,6 +316,7 @@ model.update = function(ts) {
 		});
 	}
 
+// Rotate the ship (these functions are called in response to keypresses)
 model.rotateShipLeft = function() {
 	this.ship.rotate = -ROT_SPEED;
 }
@@ -337,10 +338,11 @@ model.fireGun = function() {
 	});
 }
 
+// Create a bunch of short lived fast particles at the provided location
 model.sparkle = function(loc) {
 	for(var i=0; i<20; i++) {
-		var v = 2.5*(1+Math.random())/2.0;
 		var angle = Math.random()*6.28;
+		var v = 2.5*(1+Math.random())/2.0;
 		this.particles.push({
 			x : loc.x,
 			y :  loc.y,
@@ -350,6 +352,7 @@ model.sparkle = function(loc) {
 	}
 }
 
+// Create a bunch of long lived particles slower particles at the provided location
 model.explode = function(loc) {
 	for(var i=0; i<20; i++) {
 		var angle = Math.random()*6.28;
@@ -363,8 +366,8 @@ model.explode = function(loc) {
 	}
 }
 
+// Destroy the ship
 model.die = function() {
-	console.log('dying')
 	this.state = 'dying';
 	this.sparkle(this.ship);
 }
@@ -376,6 +379,7 @@ model.win = function() {
 model.start = function() {
 	this.state = 'playing';
 }
+
 model.restart = function() {
 	this.state = "stopped";
 	this.loadLevel(this.levels[this.level]);

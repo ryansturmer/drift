@@ -219,7 +219,7 @@ DriftView.prototype.draw = function() {
 	 * Draw all the editor acoutrements
 	 */
 	if(this.model.state === 'paused') {
-		this.drawGrid(100);
+		this.drawGrid(50);
 
 		// Cracked planet guide
 		this.model.planets.forEach(planet => {
