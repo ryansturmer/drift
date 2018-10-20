@@ -292,7 +292,14 @@ DriftView.prototype.draw = function() {
 	switch(this.model.state) {
 		case 'dying':
 		case 'dead':
-			this.drawItem({x : this.canvas.width/2, y: this.canvas.height/2}, 'img-you-died')
+			switch(navigator.language) {
+				case 'jp':
+					this.drawItem({x : this.canvas.width/2, y: this.canvas.height/2}, 'img-you-died-jp')
+					break;
+				default:
+					this.drawItem({x : this.canvas.width/2, y: this.canvas.height/2}, 'img-you-died')				
+					break;
+			}
 			break;
 		case 'win':
 			this.drawItem({x : this.canvas.width/2, y: this.canvas.height/2}, 'img-you-win');
