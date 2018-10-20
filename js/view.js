@@ -293,6 +293,7 @@ DriftView.prototype.draw = function() {
 		case 'dying':
 		case 'dead':
 			switch(navigator.language) {
+				case 'ja':
 				case 'jp':
 					this.drawItem({x : this.canvas.width/2, y: this.canvas.height/2}, 'img-you-died-jp')
 					break;

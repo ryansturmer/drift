@@ -5,7 +5,7 @@ var G = 0.02;
 
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
-document.getElementById('debug').innerHTML = navigator.language
+//document.getElementById('debug').innerHTML = navigator.language
 
 function download(filename, text) {
   var element = document.createElement('a');
